@@ -699,9 +699,9 @@ const [saving, setSaving] = useState(false)
    - Returns formatted time description
    - Examples: "Due today", "Due in 2 days", "Overdue by 5 days"
 
-#### Lists and Tags (`utils/listsAndTags.ts`)
+#### Lists and Tags (`services/listsAndTagsService.ts`)
 
-**Storage:** Uses `localStorage` for persistence
+**Storage:** Uses Supabase API for persistence
 
 **Functions:**
 - `getCustomLists()`: Retrieves custom lists
@@ -1030,8 +1030,8 @@ page.tsx (Main Page)
 - Local component state
 
 **Persistent State:**
-- Custom lists: `localStorage`
-- Tags: `localStorage`
+- Custom lists: Stored in Supabase `custom_lists` table
+- Tags: Stored in Supabase `tags` table
 
 ### State Updates
 
