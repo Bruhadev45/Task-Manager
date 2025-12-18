@@ -33,9 +33,13 @@ export default function TaskList({
   onCreateNew,
   sortBy = null,
   sortOrder = 'asc',
-  onSortChange
+  onSortChange,
+  selectedTag = null
 }: TaskListProps) {
   const getViewTitle = () => {
+    if (selectedTag) {
+      return `Tag: ${selectedTag}`
+    }
     switch (selectedView) {
       case 'today': return 'Today'
       case 'upcoming': return 'Upcoming'

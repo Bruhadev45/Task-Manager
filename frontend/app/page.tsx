@@ -22,6 +22,7 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [sortBy, setSortBy] = useState<'priority' | 'status' | null>(null)
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   // Fetch tasks on component mount
   useEffect(() => {
@@ -97,6 +98,15 @@ export default function Home() {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(query) ||
         task.description?.toLowerCase().includes(query)
+      )
+    }
+
+    // Filter by selected tag (search in title and description)
+    if (selectedTag) {
+      const tagLower = selectedTag.toLowerCase()
+      filtered = filtered.filter(task =>
+        task.title.toLowerCase().includes(tagLower) ||
+        task.description?.toLowerCase().includes(tagLower)
       )
     }
 
@@ -176,11 +186,23 @@ export default function Home() {
     <div className={`app-layout ${!sidebarOpen ? 'sidebar-closed-layout' : ''}`}>
       <Sidebar 
         selectedView={selectedView} 
-        onViewChange={setSelectedView}
+        onViewChange={(view) => {
+          setSelectedView(view)
+          setSelectedTag(null) // Clear tag filter when changing view
+        }}
         onSearchChange={setSearchQuery}
         tasks={tasks}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
+        selectedTag={selectedTag}
+        onTagSelect={(tag) => {
+          if (selectedTag === tag) {
+            setSelectedTag(null) // Toggle off if already selected
+          } else {
+            setSelectedTag(tag)
+            setSelectedView('') // Clear view filter when selecting tag
+          }
+        }}
       />
       
       <div className="main-content">
@@ -208,6 +230,7 @@ export default function Home() {
             setSortBy(field)
             setSortOrder(order)
           }}
+          selectedTag={selectedTag}
         />
       </div>
 

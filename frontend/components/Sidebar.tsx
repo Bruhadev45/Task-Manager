@@ -18,6 +18,8 @@ interface SidebarProps {
   tasks?: Task[] // Add tasks prop to calculate counts
   isOpen?: boolean // Whether sidebar is open
   onToggle?: () => void // Callback to toggle sidebar
+  selectedTag?: string | null
+  onTagSelect?: (tag: string) => void
 }
 
 export default function Sidebar({ 
@@ -26,7 +28,9 @@ export default function Sidebar({
   onSearchChange, 
   tasks = [], 
   isOpen = true, 
-  onToggle
+  onToggle,
+  selectedTag = null,
+  onTagSelect
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [customLists, setCustomLists] = useState<string[]>([])
@@ -243,8 +247,24 @@ export default function Sidebar({
             {tags.map((tag, index) => {
               const colors = ['#86efac', '#f9a8d4', '#fbbf24', '#60a5fa', '#ec4899']
               const color = colors[index % colors.length]
+              const isSelected = selectedTag === tag
               return (
-                <span key={tag} className="tag-pill" style={{ backgroundColor: color }}>
+                <span 
+                  key={tag} 
+                  className={`tag-pill ${isSelected ? 'tag-selected' : ''}`}
+                  style={{ 
+                    backgroundColor: isSelected ? '#3b82f6' : color,
+                    color: isSelected ? 'white' : '#333',
+                    cursor: 'pointer',
+                    fontWeight: isSelected ? '600' : '400'
+                  }}
+                  onClick={() => {
+                    if (onTagSelect) {
+                      onTagSelect(tag)
+                    }
+                  }}
+                  title={`Filter tasks by ${tag}`}
+                >
                   {tag}
                 </span>
               )
