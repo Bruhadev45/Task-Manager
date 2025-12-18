@@ -836,9 +836,31 @@ a {
 }
 
 .modal-actions .btn-cancel,
-.modal-actions .btn-save {
+.modal-actions .btn-save,
+.modal-actions .btn-delete-confirm {
   flex: 0 0 auto;
   min-width: 80px;
+}
+
+.btn-delete-confirm {
+  padding: 10px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-delete-confirm:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-delete-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ============================================

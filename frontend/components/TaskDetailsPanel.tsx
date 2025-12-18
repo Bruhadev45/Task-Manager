@@ -10,6 +10,7 @@ import { taskService } from '@/services/taskService'
 import { showToast } from '@/utils/toast'
 import { getAllLists, getTags, addTag } from '@/utils/listsAndTags'
 import AddTagModal from './AddTagModal'
+import DeleteConfirmationModal from './DeleteConfirmationModal'
 
 interface TaskDetailsPanelProps {
   task: Task | null
@@ -44,6 +45,7 @@ export default function TaskDetailsPanel({
   const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
   const [availableTags, setAvailableTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   
   useEffect(() => {
     setAvailableLists(getAllLists())
@@ -214,18 +216,20 @@ export default function TaskDetailsPanel({
     }
   }
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = async () => {
     if (!task) return
     
-    if (confirm('Are you sure you want to delete this task?')) {
-      try {
-        await taskService.deleteTask(task.id)
-        showToast('Task deleted successfully', 'success')
-        onDelete()
-        onClose()
-      } catch (err) {
-        showToast('Failed to delete task', 'error')
-      }
+    try {
+      await taskService.deleteTask(task.id)
+      showToast('Task deleted successfully', 'success')
+      onDelete()
+      onClose()
+    } catch (err) {
+      showToast('Failed to delete task', 'error')
     }
   }
 
