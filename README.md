@@ -2,7 +2,7 @@
 
 ## 🌐 Live Demo
 
-**Frontend (Vercel)**: [https://your-app.vercel.app](https://your-app.vercel.app)
+**Frontend (Vercel)**: [https://task-manager-bruuu.vercel.app](https://task-manager-bruuu.vercel.app)
 
 **Backend API**: [https://your-backend.railway.app](https://your-backend.railway.app) (or your backend URL)
 
@@ -292,7 +292,7 @@ The frontend is deployed on Vercel. To deploy:
 4. Add environment variable: `NEXT_PUBLIC_API_URL` (your backend URL)
 5. Deploy
 
-**Live Demo**: [https://your-app.vercel.app](https://your-app.vercel.app)
+**Live Demo**: [https://task-manager-bruuu.vercel.app](https://task-manager-bruuu.vercel.app)
 
 ### Backend Deployment
 
