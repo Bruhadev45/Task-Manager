@@ -46,7 +46,63 @@ A clean, production-quality Task Manager application with a modern three-column 
 - **Python Virtual Environment** - Isolated Python environment for dependency management
 - **Git** - Version control system
 
-## 🚀 How to Install & Run Backend
+## ⚡ Quick Start (Using Shell Scripts)
+
+The easiest way to set up and run the application is using the provided shell scripts:
+
+### Step 1: Make Scripts Executable (First Time Only)
+```bash
+chmod +x setup.sh start.sh start-backend.sh start-frontend.sh stop.sh
+```
+
+### Step 2: Run Setup Script
+This will install all dependencies for both backend and frontend:
+```bash
+./setup.sh
+```
+
+### Step 3: Configure Environment Variables
+Before running, make sure to set up your environment variables:
+
+**Backend** (`backend/.env`):
+```bash
+cp backend/.env.example backend/.env
+# Then edit backend/.env with your Supabase credentials
+```
+
+**Frontend** (`frontend/.env.local` - optional):
+```bash
+cp frontend/.env.local.example frontend/.env.local
+# Edit if your backend runs on a different port
+```
+
+### Step 4: Start the Application
+
+**Option A: Start Both Servers Together**
+```bash
+./start.sh
+```
+This will start both backend and frontend servers.
+
+**Option B: Start Servers Separately**
+```bash
+# Start backend only
+./start-backend.sh
+
+# Start frontend only (in another terminal)
+./start-frontend.sh
+```
+
+### Step 5: Stop the Servers
+```bash
+./stop.sh
+```
+
+**Note**: On macOS/Linux, you can run these scripts directly. On Windows, use Git Bash or WSL.
+
+---
+
+## 🚀 How to Install & Run Backend (Manual Setup)
 
 ### Prerequisites
 - Python 3.8+ installed
