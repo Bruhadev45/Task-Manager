@@ -1106,7 +1106,7 @@ page.tsx (Main Page)
 - Framework: Next.js
 
 **Environment Variables:**
-- `NEXT_PUBLIC_API_URL`: Backend API URL
+- `NEXT_PUBLIC_API_URL`: Backend API URL (e.g., `https://task-manager-o9by.vercel.app`)
 
 **Process:**
 1. Push code to GitHub
@@ -1114,6 +1114,8 @@ page.tsx (Main Page)
 3. Configure build settings
 4. Add environment variables
 5. Deploy
+
+**Live Demo**: https://task-manager-bruuu.vercel.app
 
 ### Backend Deployment (Vercel)
 
