@@ -1,5 +1,13 @@
 # Task Manager - Full-Stack Application
 
+## 🌐 Live Demo
+
+**Frontend (Vercel)**: [https://your-app.vercel.app](https://your-app.vercel.app)
+
+**Backend API**: [https://your-backend.railway.app](https://your-backend.railway.app) (or your backend URL)
+
+**API Documentation**: [https://your-backend.railway.app/docs](https://your-backend.railway.app/docs)
+
 ## 📋 Project Overview
 
 A clean, production-quality Task Manager application with a modern three-column layout. Built with Next.js, FastAPI, and Supabase, demonstrating full-stack development with proper separation of concerns, human-readable code, and comprehensive error handling.
