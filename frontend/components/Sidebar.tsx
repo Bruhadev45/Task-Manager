@@ -73,16 +73,16 @@ export default function Sidebar({
     tomorrow.setDate(tomorrow.getDate() + 1)
     tomorrow.setHours(0, 0, 0, 0)
     
-    const todayCount = tasks.filter(task => {
-      if (!task.due_date) return true
-      
-      let taskDateStr = task.due_date
-      if (taskDateStr.includes('T')) {
-        taskDateStr = taskDateStr.split('T')[0]
-      }
-      
-      return taskDateStr === todayStr
-    }).length
+      const todayCount = tasks.filter(task => {
+        if (!task.due_date) return true
+        
+        let taskDateStr = String(task.due_date)
+        if (taskDateStr.includes('T')) {
+          taskDateStr = taskDateStr.split('T')[0]
+        }
+        
+        return taskDateStr === todayStr
+      }).length
 
     const upcomingCount = tasks.filter(task => {
       if (!task.due_date) return false

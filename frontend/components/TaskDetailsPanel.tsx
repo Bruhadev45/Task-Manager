@@ -80,8 +80,16 @@ export default function TaskDetailsPanel({
       setPriority(task.priority)
       setList(task.list || null)
       if (task.due_date) {
-        const date = new Date(task.due_date)
-        setDueDate(date.toISOString().split('T')[0])
+        try {
+          const date = new Date(task.due_date)
+          if (!isNaN(date.getTime())) {
+            setDueDate(date.toISOString().split('T')[0])
+          } else {
+            setDueDate('')
+          }
+        } catch (e) {
+          setDueDate('')
+        }
       } else {
         setDueDate('')
       }

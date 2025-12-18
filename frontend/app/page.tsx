@@ -98,16 +98,16 @@ export default function Home() {
         const day = String(now.getDate()).padStart(2, '0')
         const todayStr = `${year}-${month}-${day}`
         
-        filtered = filtered.filter(t => {
-          if (!t.due_date) return true
-          
-          let taskDateStr = t.due_date
-          if (taskDateStr.includes('T')) {
-            taskDateStr = taskDateStr.split('T')[0]
-          }
-          
-          return taskDateStr === todayStr
-        })
+          filtered = filtered.filter(t => {
+            if (!t.due_date) return true
+            
+            let taskDateStr = String(t.due_date)
+            if (taskDateStr.includes('T')) {
+              taskDateStr = taskDateStr.split('T')[0]
+            }
+            
+            return taskDateStr === todayStr
+          })
         break
       }
       case 'upcoming': {
@@ -140,10 +140,11 @@ export default function Home() {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(query) ||
-        task.description?.toLowerCase().includes(query)
-      )
+      filtered = filtered.filter(task => {
+        const titleMatch = task.title?.toLowerCase().includes(query) ?? false
+        const descMatch = task.description?.toLowerCase().includes(query) ?? false
+        return titleMatch || descMatch
+      })
     }
 
     // Filter by selected tag (check if tag is in task.tags array)
