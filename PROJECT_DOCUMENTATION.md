@@ -446,7 +446,7 @@ frontend/
 │   └── task.ts              # TypeScript type definitions
 └── utils/
     ├── dateUtils.ts         # Date formatting utilities
-    ├── listsAndTags.ts      # Lists/tags localStorage utilities
+    ├── listsAndTagsService.ts  # Lists/tags API service
     └── toast.tsx            # Toast notification component
 ```
 
@@ -540,12 +540,12 @@ Uses `useMemo` to calculate counts dynamically:
 - Updates UI when lists/tags change
 
 **List Management:**
-- Loads custom lists from `localStorage`
+- Loads custom lists from Supabase API
 - Displays default lists (personal, work, list1) + custom lists
 - Provides "Add New List" functionality via modal
 
 **Tag Management:**
-- Loads tags from `localStorage`
+- Loads tags from Supabase API
 - Displays tags as pills
 - Provides "Add Tag" functionality via modal
 
@@ -842,7 +842,7 @@ filtered = tasks.filter(task => task.list === selectedList)
 - Parent re-renders children with new props
 
 **Event-Driven Updates:**
-- Lists/tags stored in `localStorage`
+- Lists/tags stored in Supabase database
 - Custom events dispatched on changes
 - Components listen and update UI
 - Enables cross-component updates
