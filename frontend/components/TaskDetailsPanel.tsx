@@ -7,8 +7,8 @@
 import { useState, useEffect } from 'react'
 import { Task, TaskUpdate, TaskCreate, TaskList } from '@/types/task'
 import { taskService } from '@/services/taskService'
+import { listsAndTagsService } from '@/services/listsAndTagsService'
 import { showToast } from '@/utils/toast'
-import { getAllLists, getTags, addTag } from '@/utils/listsAndTags'
 import AddTagModal from './AddTagModal'
 import DeleteConfirmationModal from './DeleteConfirmationModal'
 
@@ -48,24 +48,24 @@ export default function TaskDetailsPanel({
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   
   useEffect(() => {
-    setAvailableLists(getAllLists())
-    setAvailableTags(getTags())
-    
-    const handleListsUpdate = () => {
-      setAvailableLists(getAllLists())
-    }
-    const handleTagsUpdate = () => {
-      setAvailableTags(getTags())
-    }
-    
-    window.addEventListener('listsUpdated', handleListsUpdate)
-    window.addEventListener('tagsUpdated', handleTagsUpdate)
-    
-    return () => {
-      window.removeEventListener('listsUpdated', handleListsUpdate)
-      window.removeEventListener('tagsUpdated', handleTagsUpdate)
-    }
+    loadListsAndTags()
   }, [])
+  
+  const loadListsAndTags = async () => {
+    try {
+      const [listsData, tagsData] = await Promise.all([
+        listsAndTagsService.getAllLists(),
+        listsAndTagsService.getAllTags()
+      ])
+      setAvailableLists(listsData)
+      setAvailableTags(tagsData)
+    } catch (error) {
+      console.error('Error loading lists and tags:', error)
+      // Fallback to default lists
+      setAvailableLists(['personal', 'work', 'list1'])
+      setAvailableTags([])
+    }
+  }
 
   useEffect(() => {
     if (onCreateMode !== undefined) {
@@ -462,11 +462,10 @@ export default function TaskDetailsPanel({
       <AddTagModal
         isOpen={showAddTagModal}
         onClose={() => setShowAddTagModal(false)}
-        onConfirm={(tagName) => {
-          const success = addTag(tagName.trim())
+        onConfirm={async (tagName) => {
+          const success = await listsAndTagsService.createTag(tagName.trim())
           if (success) {
-            setAvailableTags(getTags())
-            window.dispatchEvent(new Event('tagsUpdated'))
+            await loadListsAndTags()
             showToast('Tag added successfully', 'success')
             setShowAddTagModal(false)
           } else {

@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { Task } from '@/types/task'
-import { getAllLists, addCustomList, getCustomLists, getTags, addTag } from '@/utils/listsAndTags'
+import { listsAndTagsService } from '@/services/listsAndTagsService'
 import { showToast } from '@/utils/toast'
 import AddListModal from './AddListModal'
 import AddTagModal from './AddTagModal'
@@ -28,28 +28,28 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   
   useEffect(() => {
-    setCustomLists(getCustomLists())
-    setTags(getTags())
+    loadListsAndTags()
   }, [])
   
-  useEffect(() => {
-    const handleListsUpdate = () => {
-      setCustomLists(getCustomLists())
+  const loadListsAndTags = async () => {
+    try {
+      const [listsData, tagsData] = await Promise.all([
+        listsAndTagsService.getAllLists(),
+        listsAndTagsService.getAllTags()
+      ])
+      
+      // Filter out default lists to get only custom lists
+      const defaultLists = ['personal', 'work', 'list1']
+      const customListsData = listsData.filter(list => !defaultLists.includes(list))
+      setCustomLists(customListsData)
+      setTags(tagsData)
+    } catch (error) {
+      console.error('Error loading lists and tags:', error)
+      // Fallback to empty arrays
+      setCustomLists([])
+      setTags([])
     }
-    const handleTagsUpdate = () => {
-      setTags(getTags())
-    }
-    
-    window.addEventListener('storage', handleListsUpdate)
-    window.addEventListener('listsUpdated', handleListsUpdate)
-    window.addEventListener('tagsUpdated', handleTagsUpdate)
-    
-    return () => {
-      window.removeEventListener('storage', handleListsUpdate)
-      window.removeEventListener('listsUpdated', handleListsUpdate)
-      window.removeEventListener('tagsUpdated', handleTagsUpdate)
-    }
-  }, [])
+  }
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
@@ -106,11 +106,10 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
     }
   }, [tasks, customLists])
   
-  const handleAddNewList = (listName: string) => {
-    const success = addCustomList(listName)
+  const handleAddNewList = async (listName: string) => {
+    const success = await listsAndTagsService.createList(listName)
     if (success) {
-      setCustomLists(getCustomLists())
-      window.dispatchEvent(new Event('listsUpdated'))
+      await loadListsAndTags()
       showToast('List added successfully', 'success')
       setShowAddListModal(false)
     } else {
@@ -118,11 +117,10 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
     }
   }
   
-  const handleAddTag = (tagName: string) => {
-    const success = addTag(tagName)
+  const handleAddTag = async (tagName: string) => {
+    const success = await listsAndTagsService.createTag(tagName)
     if (success) {
-      setTags(getTags())
-      window.dispatchEvent(new Event('tagsUpdated'))
+      await loadListsAndTags()
       showToast('Tag added successfully', 'success')
       setShowAddTagModal(false)
     } else {

@@ -24,6 +24,60 @@ CREATE INDEX IF NOT EXISTS idx_tasks_created_at ON tasks(created_at);
 CREATE INDEX IF NOT EXISTS idx_tasks_list ON tasks(list);
 CREATE INDEX IF NOT EXISTS idx_tasks_subtasks ON tasks USING GIN (subtasks);
 
+-- Create custom_lists table
+CREATE TABLE IF NOT EXISTS custom_lists (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL UNIQUE,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Create tags table
+CREATE TABLE IF NOT EXISTS tags (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL UNIQUE,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Create indexes for lists and tags
+CREATE INDEX IF NOT EXISTS idx_custom_lists_name ON custom_lists(name);
+CREATE INDEX IF NOT EXISTS idx_tags_name ON tags(name);
+
+-- Insert default lists
+INSERT INTO custom_lists (name) VALUES
+  ('personal'),
+  ('work'),
+  ('list1'),
+  ('education')
+ON CONFLICT (name) DO NOTHING;
+
+-- Insert default tags
+INSERT INTO tags (name) VALUES
+  ('urgent'),
+  ('important'),
+  ('study'),
+  ('coding'),
+  ('project'),
+  ('meeting'),
+  ('deadline'),
+  ('review'),
+  ('practice'),
+  ('assignment'),
+  ('exam'),
+  ('certification'),
+  ('tutorial'),
+  ('workshop'),
+  ('reading'),
+  ('research'),
+  ('development'),
+  ('learning'),
+  ('frontend'),
+  ('backend'),
+  ('database'),
+  ('algorithm'),
+  ('design'),
+  ('documentation')
+ON CONFLICT (name) DO NOTHING;
+
 -- Insert sample tasks
 INSERT INTO tasks (title, description, status, priority, due_date, list, subtasks) VALUES
 -- Work tasks
