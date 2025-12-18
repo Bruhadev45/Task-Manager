@@ -352,8 +352,25 @@ This project follows industry best practices to ensure the code is **human-reada
 - In production, restrict CORS origins to your frontend domain
 - Consider adding authentication/authorization for production use
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+The frontend can be deployed to Vercel for free. See `VERCEL_DEPLOYMENT.md` for detailed deployment instructions.
+
+**Quick Steps:**
+1. Push your code to GitHub
+2. Import project in Vercel dashboard
+3. Set root directory to `frontend`
+4. Add `NEXT_PUBLIC_API_URL` environment variable
+5. Deploy!
+
+**Backend Deployment:**
+The backend needs to be deployed separately (Railway, Render, or Heroku). See `VERCEL_DEPLOYMENT.md` for backend deployment options.
+
 ## 📚 Additional Documentation
 
+- **Deployment**: See `VERCEL_DEPLOYMENT.md` for Vercel deployment guide
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md` for common issues and solutions
 - **Project Structure**: See `docs/PROJECT_STRUCTURE.md` for detailed code organization
 - **Coding Standards**: See `docs/CODING_STANDARDS.md` for coding best practices
