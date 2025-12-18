@@ -724,6 +724,21 @@ a {
   color: white;
 }
 
+.tag-select-btn.show-more-tags,
+.tag-select-btn.show-less-tags {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.tag-select-btn.show-more-tags:hover,
+.tag-select-btn.show-less-tags:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
 .tag-check {
   font-size: 14px;
   font-weight: 600;

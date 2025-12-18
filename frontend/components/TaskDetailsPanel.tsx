@@ -48,6 +48,7 @@ export default function TaskDetailsPanel({
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [newTagInput, setNewTagInput] = useState('')
+  const [showAllTags, setShowAllTags] = useState(false)
   
   useEffect(() => {
     loadListsAndTags()
@@ -356,7 +357,7 @@ export default function TaskDetailsPanel({
           <div className="tags-display">
             {availableTags.length > 0 && (
               <div className="tags-selection-container">
-                {availableTags.map(tag => {
+                {(showAllTags ? availableTags : availableTags.slice(0, 4)).map(tag => {
                   const isSelected = selectedTags.includes(tag)
                   return (
                     <button
@@ -376,6 +377,24 @@ export default function TaskDetailsPanel({
                     </button>
                   )
                 })}
+                {availableTags.length > 4 && !showAllTags && (
+                  <button
+                    type="button"
+                    className="tag-select-btn show-more-tags"
+                    onClick={() => setShowAllTags(true)}
+                  >
+                    +{availableTags.length - 4} more
+                  </button>
+                )}
+                {showAllTags && availableTags.length > 4 && (
+                  <button
+                    type="button"
+                    className="tag-select-btn show-less-tags"
+                    onClick={() => setShowAllTags(false)}
+                  >
+                    Show less
+                  </button>
+                )}
               </div>
             )}
             <div className="add-tag-input-group">
