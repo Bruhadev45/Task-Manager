@@ -18,9 +18,6 @@ interface SidebarProps {
   tasks?: Task[] // Add tasks prop to calculate counts
   isOpen?: boolean // Whether sidebar is open
   onToggle?: () => void // Callback to toggle sidebar
-  sortBy?: 'priority' | 'status' | null
-  sortOrder?: 'asc' | 'desc'
-  onSortChange?: (field: 'priority' | 'status' | null, order: 'asc' | 'desc') => void
 }
 
 export default function Sidebar({ 
@@ -29,10 +26,7 @@ export default function Sidebar({
   onSearchChange, 
   tasks = [], 
   isOpen = true, 
-  onToggle,
-  sortBy = null,
-  sortOrder = 'asc',
-  onSortChange
+  onToggle
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [customLists, setCustomLists] = useState<string[]>([])
@@ -240,62 +234,6 @@ export default function Sidebar({
           <span className="sidebar-icon">+</span>
           <span>Add New List</span>
         </div>
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">SORT BY</div>
-        <div
-          className={`sidebar-item ${sortBy === 'priority' ? 'active' : ''}`}
-          onClick={() => {
-            if (onSortChange) {
-              if (sortBy === 'priority') {
-                // Toggle order if already sorting by priority
-                onSortChange('priority', sortOrder === 'asc' ? 'desc' : 'asc')
-              } else {
-                onSortChange('priority', 'asc')
-              }
-            }
-          }}
-        >
-          <span className="sidebar-icon">⚡</span>
-          <span>Priority</span>
-          {sortBy === 'priority' && (
-            <span className="sort-indicator">{sortOrder === 'asc' ? '↑' : '↓'}</span>
-          )}
-        </div>
-        <div
-          className={`sidebar-item ${sortBy === 'status' ? 'active' : ''}`}
-          onClick={() => {
-            if (onSortChange) {
-              if (sortBy === 'status') {
-                // Toggle order if already sorting by status
-                onSortChange('status', sortOrder === 'asc' ? 'desc' : 'asc')
-              } else {
-                onSortChange('status', 'asc')
-              }
-            }
-          }}
-        >
-          <span className="sidebar-icon">✓</span>
-          <span>Status</span>
-          {sortBy === 'status' && (
-            <span className="sort-indicator">{sortOrder === 'asc' ? '↑' : '↓'}</span>
-          )}
-        </div>
-        {sortBy && (
-          <div
-            className="sidebar-item"
-            onClick={() => {
-              if (onSortChange) {
-                onSortChange(null, 'asc')
-              }
-            }}
-            style={{ opacity: 0.7, fontSize: '12px' }}
-          >
-            <span className="sidebar-icon">✕</span>
-            <span>Clear Sort</span>
-          </div>
-        )}
       </div>
 
       <div className="sidebar-section">

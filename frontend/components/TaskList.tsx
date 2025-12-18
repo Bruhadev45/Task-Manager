@@ -17,6 +17,9 @@ interface TaskListProps {
   onTaskDelete: (task: Task) => void
   onRefresh: () => void
   onCreateNew?: () => void // Callback to trigger create mode
+  sortBy?: 'priority' | 'status' | null
+  sortOrder?: 'asc' | 'desc'
+  onSortChange?: (field: 'priority' | 'status' | null, order: 'asc' | 'desc') => void
 }
 
 export default function TaskList({
@@ -27,7 +30,10 @@ export default function TaskList({
   onTaskSelect,
   onTaskDelete,
   onRefresh,
-  onCreateNew
+  onCreateNew,
+  sortBy = null,
+  sortOrder = 'asc',
+  onSortChange
 }: TaskListProps) {
   const getViewTitle = () => {
     switch (selectedView) {
@@ -69,6 +75,52 @@ export default function TaskList({
       <div className="task-list-header">
         <h1>{getViewTitle()}</h1>
         <span className="task-count">{tasks.length}</span>
+        <div className="sort-controls">
+          <select
+            className="sort-select"
+            value={sortBy || ''}
+            onChange={(e) => {
+              if (onSortChange) {
+                const value = e.target.value as 'priority' | 'status' | ''
+                if (value === '') {
+                  onSortChange(null, 'asc')
+                } else {
+                  onSortChange(value, sortOrder)
+                }
+              }
+            }}
+          >
+            <option value="">Sort by...</option>
+            <option value="priority">Priority</option>
+            <option value="status">Status</option>
+          </select>
+          {sortBy && (
+            <>
+              <button
+                className="sort-order-btn"
+                onClick={() => {
+                  if (onSortChange) {
+                    onSortChange(sortBy, sortOrder === 'asc' ? 'desc' : 'asc')
+                  }
+                }}
+                title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
+              >
+                {sortOrder === 'asc' ? '↑' : '↓'}
+              </button>
+              <button
+                className="sort-clear-btn"
+                onClick={() => {
+                  if (onSortChange) {
+                    onSortChange(null, 'asc')
+                  }
+                }}
+                title="Clear sort"
+              >
+                ✕
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <button 

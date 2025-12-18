@@ -181,12 +181,6 @@ export default function Home() {
         tasks={tasks}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        onSortChange={(field, order) => {
-          setSortBy(field)
-          setSortOrder(order)
-        }}
       />
       
       <div className="main-content">
@@ -208,6 +202,12 @@ export default function Home() {
           onTaskDelete={handleTaskDelete}
           onRefresh={loadTasks}
           onCreateNew={handleCreateNew}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={(field, order) => {
+            setSortBy(field)
+            setSortOrder(order)
+          }}
         />
       </div>
 
