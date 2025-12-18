@@ -153,6 +153,13 @@ a {
   color: #666;
 }
 
+.sort-indicator {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b82f6;
+}
+
 .list-color {
   width: 12px;
   height: 12px;
