@@ -845,10 +845,10 @@ filtered = tasks.filter(task => task.list === selectedList)
 - Callbacks update parent state
 - Parent re-renders children with new props
 
-**Event-Driven Updates:**
+**API-Driven Updates:**
 - Lists/tags stored in Supabase database
-- Custom events dispatched on changes
-- Components listen and update UI
+- Components fetch data from API on mount
+- UI updates when data changes
 - Enables cross-component updates
 
 ---
