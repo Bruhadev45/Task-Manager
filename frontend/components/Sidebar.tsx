@@ -244,14 +244,14 @@ export default function Sidebar({
         <div className="sidebar-section-title">TAGS</div>
         {tags.length > 0 && (
           <div className="tags-container">
-            {tags.map((tag, index) => {
+            {tags.slice(0, 5).map((tag, index) => {
               const colors = ['#86efac', '#f9a8d4', '#fbbf24', '#60a5fa', '#ec4899']
               const color = colors[index % colors.length]
               const isSelected = selectedTag === tag
               return (
                 <span 
                   key={tag} 
-                  className={`tag-pill ${isSelected ? 'tag-selected' : ''}`}
+                  className={`tag-pill ${isSelected ? 'tag-selected' : ''} clickable`}
                   style={{ 
                     backgroundColor: isSelected ? '#3b82f6' : color,
                     color: isSelected ? 'white' : '#333',
