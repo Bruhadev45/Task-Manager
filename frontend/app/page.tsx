@@ -20,6 +20,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isCreateMode, setIsCreateMode] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sortBy, setSortBy] = useState<'priority' | 'status' | null>(null)
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   // Fetch tasks on component mount
   useEffect(() => {
@@ -98,6 +100,42 @@ export default function Home() {
       )
     }
 
+    // Apply sorting
+    if (sortBy) {
+      filtered.sort((a, b) => {
+        let aValue: string
+        let bValue: string
+
+        if (sortBy === 'priority') {
+          const priorityOrder = { high: 3, medium: 2, low: 1 }
+          aValue = a.priority || 'medium'
+          bValue = b.priority || 'medium'
+          const aPriority = priorityOrder[aValue as keyof typeof priorityOrder] || 2
+          const bPriority = priorityOrder[bValue as keyof typeof priorityOrder] || 2
+          
+          if (sortOrder === 'asc') {
+            return aPriority - bPriority
+          } else {
+            return bPriority - aPriority
+          }
+        } else if (sortBy === 'status') {
+          const statusOrder = { todo: 1, 'in-progress': 2, done: 3 }
+          aValue = a.status || 'todo'
+          bValue = b.status || 'todo'
+          const aStatus = statusOrder[aValue as keyof typeof statusOrder] || 1
+          const bStatus = statusOrder[bValue as keyof typeof statusOrder] || 1
+          
+          if (sortOrder === 'asc') {
+            return aStatus - bStatus
+          } else {
+            return bStatus - aStatus
+          }
+        }
+        
+        return 0
+      })
+    }
+
     return filtered
   }
 
@@ -143,6 +181,12 @@ export default function Home() {
         tasks={tasks}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={(field, order) => {
+          setSortBy(field)
+          setSortOrder(order)
+        }}
       />
       
       <div className="main-content">
