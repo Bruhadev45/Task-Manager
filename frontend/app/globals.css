@@ -270,6 +270,14 @@ a {
   justify-content: space-between;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
 /* When sidebar is closed, add left padding for toggle button */
 .sidebar-closed-layout .task-list-header {
   padding-left: 80px;
@@ -301,57 +309,91 @@ a {
 .sort-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-.sort-select {
-  padding: 6px 12px;
-  border: 1px solid #e5e5e5;
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f5f5;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
   border-radius: 6px;
-  font-size: 14px;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.sort-select:hover {
-  border-color: #3b82f6;
-}
-
-.sort-select:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-}
-
-.sort-order-btn,
-.sort-clear-btn {
-  padding: 6px 10px;
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  background: white;
+  background: transparent;
   color: #666;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.sort-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.sort-btn.active {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.sort-btn.active:hover {
+  background: #2563eb;
+}
+
+.sort-icon {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.sort-label {
+  font-size: 13px;
+}
+
+.sort-arrow {
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.sort-clear-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
   min-width: 32px;
+  height: 32px;
 }
 
-.sort-order-btn:hover,
 .sort-clear-btn:hover {
-  background: #f5f5f5;
-  border-color: #3b82f6;
-  color: #3b82f6;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
 
-.sort-order-btn {
+.clear-icon {
+  font-size: 16px;
   font-weight: 600;
-  color: #3b82f6;
+  line-height: 1;
 }
 
 .add-task-button {

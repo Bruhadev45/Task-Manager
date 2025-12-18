@@ -77,40 +77,51 @@ export default function TaskList({
   return (
     <div className="task-list-column">
       <div className="task-list-header">
-        <h1>{getViewTitle()}</h1>
-        <span className="task-count">{tasks.length}</span>
+        <div className="header-left">
+          <h1>{getViewTitle()}</h1>
+          <span className="task-count">{tasks.length}</span>
+        </div>
         <div className="sort-controls">
-          <select
-            className="sort-select"
-            value={sortBy || ''}
-            onChange={(e) => {
-              if (onSortChange) {
-                const value = e.target.value as 'priority' | 'status' | ''
-                if (value === '') {
-                  onSortChange(null, 'asc')
-                } else {
-                  onSortChange(value, sortOrder)
-                }
-              }
-            }}
-          >
-            <option value="">Sort by...</option>
-            <option value="priority">Priority</option>
-            <option value="status">Status</option>
-          </select>
-          {sortBy && (
-            <>
-              <button
-                className="sort-order-btn"
-                onClick={() => {
-                  if (onSortChange) {
-                    onSortChange(sortBy, sortOrder === 'asc' ? 'desc' : 'asc')
+          <div className="sort-group">
+            <button
+              className={`sort-btn ${sortBy === 'priority' ? 'active' : ''}`}
+              onClick={() => {
+                if (onSortChange) {
+                  if (sortBy === 'priority') {
+                    onSortChange('priority', sortOrder === 'asc' ? 'desc' : 'asc')
+                  } else {
+                    onSortChange('priority', 'asc')
                   }
-                }}
-                title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
-              >
-                {sortOrder === 'asc' ? '↑' : '↓'}
-              </button>
+                }
+              }}
+              title="Sort by Priority"
+            >
+              <span className="sort-icon">⚡</span>
+              <span className="sort-label">Priority</span>
+              {sortBy === 'priority' && (
+                <span className="sort-arrow">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+              )}
+            </button>
+            <button
+              className={`sort-btn ${sortBy === 'status' ? 'active' : ''}`}
+              onClick={() => {
+                if (onSortChange) {
+                  if (sortBy === 'status') {
+                    onSortChange('status', sortOrder === 'asc' ? 'desc' : 'asc')
+                  } else {
+                    onSortChange('status', 'asc')
+                  }
+                }
+              }}
+              title="Sort by Status"
+            >
+              <span className="sort-icon">✓</span>
+              <span className="sort-label">Status</span>
+              {sortBy === 'status' && (
+                <span className="sort-arrow">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+              )}
+            </button>
+            {sortBy && (
               <button
                 className="sort-clear-btn"
                 onClick={() => {
@@ -120,10 +131,10 @@ export default function TaskList({
                 }}
                 title="Clear sort"
               >
-                ✕
+                <span className="clear-icon">✕</span>
               </button>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
