@@ -193,6 +193,8 @@ export default function TaskDetailsPanel({
         setPriority('medium')
         setDueDate('')
         setList(null)
+        setUseNaturalLanguage(false)
+        setNaturalLanguageText('')
         setIsCreating(false)
         if (onSetCreateMode) {
           onSetCreateMode(false)
