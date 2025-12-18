@@ -20,6 +20,7 @@ interface TaskListProps {
   sortBy?: 'priority' | 'status' | null
   sortOrder?: 'asc' | 'desc'
   onSortChange?: (field: 'priority' | 'status' | null, order: 'asc' | 'desc') => void
+  selectedTag?: string | null
 }
 
 export default function TaskList({
