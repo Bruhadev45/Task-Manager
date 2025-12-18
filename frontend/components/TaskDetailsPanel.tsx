@@ -145,7 +145,6 @@ export default function TaskDetailsPanel({
     try {
       setSaving(true)
 
-      // If creating a new task
       if (isCreating || !task) {
         if (!title.trim()) {
           showToast('Task title is required', 'error')
@@ -201,7 +200,6 @@ export default function TaskDetailsPanel({
         subtasks: subtasksChanged ? (validSubtasks.length > 0 ? validSubtasks : []) : undefined,
       }
 
-      // Only update if there are changes
       const hasChanges = Object.keys(updateData).some(key => updateData[key as keyof TaskUpdate] !== undefined)
       
       if (hasChanges) {
@@ -243,7 +241,6 @@ export default function TaskDetailsPanel({
               if (onSetCreateMode) {
                 onSetCreateMode(false)
               }
-              // Reset form
               setTitle('')
               setDescription('')
               setStatus('todo')
@@ -416,8 +413,6 @@ export default function TaskDetailsPanel({
             <span>+</span> Add New Subtask
           </button>
         </div>
-          </>
-        )}
 
         {/* Action Buttons */}
         <div className="panel-actions">
