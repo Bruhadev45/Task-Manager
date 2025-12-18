@@ -48,7 +48,7 @@ export default function DeleteConfirmationModal({
             Are you sure you want to delete this task?
             {taskTitle && (
               <span style={{ display: 'block', marginTop: '8px', fontWeight: 600 }}>
-                "{taskTitle}"
+                &quot;{taskTitle}&quot;
               </span>
             )}
           </p>

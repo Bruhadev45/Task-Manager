@@ -474,6 +474,12 @@ export default function TaskDetailsPanel({
           }
         }}
       />
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+        taskTitle={task?.title}
+      />
     </div>
   )
 }
