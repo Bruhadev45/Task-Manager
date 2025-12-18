@@ -33,10 +33,13 @@ The Task Manager is a full-stack web application built with Next.js 14 and FastA
 - Three-column responsive UI layout
 - Complete CRUD operations for tasks
 - Subtask management
-- Custom lists and tags
+- Custom lists and tags (stored in Supabase)
+- Tag filtering and selection
+- Task sorting by priority and status
 - Real-time filtering and search
 - Date-based task organization
 - Priority and status management
+- Automatic port detection for development servers
 
 ---
 
@@ -704,11 +707,12 @@ const [saving, setSaving] = useState(false)
 **Storage:** Uses Supabase API for persistence
 
 **Functions:**
-- `getCustomLists()`: Retrieves custom lists
-- `addCustomList(name)`: Adds new custom list
-- `getAllLists()`: Returns default + custom lists
-- `getTags()`: Retrieves all tags
-- `addTag(name)`: Adds new tag
+- `getAllLists()`: Retrieves all lists from Supabase
+- `createList(name)`: Creates new list via API
+- `deleteList(name)`: Deletes list via API
+- `getAllTags()`: Retrieves all tags from Supabase
+- `createTag(name)`: Creates new tag via API
+- `deleteTag(name)`: Deletes tag via API
 - `deleteTag(name)`: Removes tag
 
 **Event System:**
@@ -1111,24 +1115,26 @@ page.tsx (Main Page)
 4. Add environment variables
 5. Deploy
 
-### Backend Deployment
+### Backend Deployment (Vercel)
 
-**Options:**
-- Railway
-- Render
-- Heroku
+**Configuration:**
+- Root directory: `backend`
+- Build command: `pip install -r requirements.txt`
+- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Framework: FastAPI
 
-**Requirements:**
-- Python 3.8+
-- Environment variables (Supabase credentials)
-- Procfile for process management
+**Environment Variables:**
+- `SUPABASE_URL`: Supabase project URL
+- `SUPABASE_KEY`: Supabase anon key
 
 **Process:**
-1. Create account on platform
-2. Connect GitHub repository
-3. Configure build/start commands
+1. Push code to GitHub
+2. Import project in Vercel
+3. Configure build settings
 4. Add environment variables
 5. Deploy
+
+**Backend API**: https://task-manager-o9by.vercel.app
 
 ---
 
