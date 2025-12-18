@@ -133,7 +133,7 @@ The application features a three-column layout:
 2. **RESTful API**: Backend follows REST principles for clean API design
 3. **Type Safety**: TypeScript on frontend, Python type hints on backend
 4. **Data Validation**: Pydantic models ensure data integrity
-5. **Error Handling**: Comprehensive error handling at all layers
+5. **Error Handling**: Error handling at all layers
 6. **Scalability**: Architecture supports future enhancements
 
 ---
@@ -696,7 +696,7 @@ const [saving, setSaving] = useState(false)
    - Returns false for completed tasks
 
 4. **`getRelativeTime(dueDate, status)`**
-   - Returns human-readable time description
+   - Returns formatted time description
    - Examples: "Due today", "Due in 2 days", "Overdue by 5 days"
 
 #### Lists and Tags (`utils/listsAndTags.ts`)
@@ -1187,7 +1187,7 @@ The Task Manager application demonstrates a well-structured, production-quality 
 **Key Strengths:**
 - Clean architecture with separation of concerns
 - Type-safe codebase
-- Comprehensive error handling
+- Error handling
 - User-friendly interface
 - Scalable design
 
