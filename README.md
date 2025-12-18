@@ -137,8 +137,7 @@ Task Manager/
 ├── start.sh                 # Start both servers
 ├── start-backend.sh         # Start backend only
 ├── start-frontend.sh         # Start frontend only
-├── stop.sh                  # Stop all servers
-└── fix-css.sh               # Fix CSS loading issues
+└── stop.sh                  # Stop all servers
 ```
 
 ## 🚀 Quick Start
@@ -381,7 +380,7 @@ This project follows industry best practices to ensure the code is **human-reada
 - If subtasks aren't working, run `database/migration_add_subtasks.sql`
 
 **CSS not loading:**
-- Run `./fix-css.sh` to clear Next.js cache
+- Clear Next.js cache: `cd frontend && rm -rf .next && npm run dev`
 - Hard refresh browser (Ctrl+Shift+R or Cmd+Shift+R)
 
 For more detailed troubleshooting, see `docs/TROUBLESHOOTING.md`.
