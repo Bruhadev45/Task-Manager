@@ -16,10 +16,16 @@ interface SidebarProps {
   onViewChange: (view: string) => void
   onSearchChange?: (query: string) => void
   tasks?: Task[] // Add tasks prop to calculate counts
+  lists?: string[]
+  tags?: string[]
+  onListsUpdate?: () => void
+  onTagsUpdate?: () => void
   isOpen?: boolean // Whether sidebar is open
   onToggle?: () => void // Callback to toggle sidebar
   selectedTag?: string | null
   onTagSelect?: (tag: string) => void
+  theme?: 'light' | 'dark'
+  onThemeToggle?: () => void
 }
 
 export default function Sidebar({ 
@@ -27,58 +33,27 @@ export default function Sidebar({
   onViewChange, 
   onSearchChange, 
   tasks = [], 
+  lists = [],
+  tags: propTags = [],
+  onListsUpdate,
+  onTagsUpdate,
   isOpen = true, 
   onToggle,
   selectedTag = null,
-  onTagSelect
+  onTagSelect,
+  theme = 'light',
+  onThemeToggle
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [customLists, setCustomLists] = useState<string[]>([])
-  const [tags, setTags] = useState<string[]>([])
   const [showAddListModal, setShowAddListModal] = useState(false)
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   
-  useEffect(() => {
-    loadListsAndTags()
-  }, [])
-  
-  const loadListsAndTags = async () => {
-    try {
-      const [listsData, tagsData] = await Promise.all([
-        listsAndTagsService.getAllLists(),
-        listsAndTagsService.getAllTags()
-      ])
-      
-      // Filter out default lists to get only custom lists
-      const defaultLists = ['personal', 'work', 'list1']
-      const customListsData = listsData.filter(list => !defaultLists.includes(list))
-      setCustomLists(customListsData)
-      
-      // Keep only first 5 tags, delete the rest
-      if (tagsData.length > 5) {
-        const tagsToKeep = tagsData.slice(0, 5)
-        const tagsToDelete = tagsData.slice(5)
-        
-        // Delete tags beyond the first 5
-        for (const tag of tagsToDelete) {
-          try {
-            await listsAndTagsService.deleteTag(tag)
-          } catch (error) {
-            console.error(`Failed to delete tag ${tag}:`, error)
-          }
-        }
-        
-        setTags(tagsToKeep)
-      } else {
-        setTags(tagsData)
-      }
-    } catch (error) {
-      console.error('Error loading lists and tags:', error)
-      // Fallback to empty arrays
-      setCustomLists([])
-      setTags([])
-    }
-  }
+  const customLists = useMemo(() => {
+    const defaultLists = ['personal', 'work', 'list1']
+    return lists.filter(list => !defaultLists.includes(list))
+  }, [lists])
+
+  const tags = propTags
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
@@ -138,7 +113,7 @@ export default function Sidebar({
   const handleAddNewList = async (listName: string) => {
     const success = await listsAndTagsService.createList(listName)
     if (success) {
-      await loadListsAndTags()
+      if (onListsUpdate) onListsUpdate()
       showToast('List added successfully', 'success')
       setShowAddListModal(false)
     } else {
@@ -149,7 +124,7 @@ export default function Sidebar({
   const handleAddTag = async (tagName: string) => {
     const success = await listsAndTagsService.createTag(tagName)
     if (success) {
-      await loadListsAndTags()
+      if (onTagsUpdate) onTagsUpdate()
       showToast('Tag added successfully', 'success')
       setShowAddTagModal(false)
     } else {
@@ -161,17 +136,27 @@ export default function Sidebar({
     <div className={`sidebar ${!isOpen ? 'sidebar-closed' : ''}`}>
       <div className="sidebar-header">
         <h2>Menu</h2>
-        <button 
-          className="menu-toggle" 
-          aria-label="Toggle menu"
-          onClick={() => {
-            if (onToggle) {
-              onToggle()
-            }
-          }}
-        >
-          {isOpen ? '☰' : '☰'}
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button 
+            className="theme-toggle-btn"
+            onClick={onThemeToggle}
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+          <button 
+            className="menu-toggle" 
+            aria-label="Toggle menu"
+            onClick={() => {
+              if (onToggle) {
+                onToggle()
+              }
+            }}
+          >
+            ☰
+          </button>
+        </div>
       </div>
 
       <div className="sidebar-search">

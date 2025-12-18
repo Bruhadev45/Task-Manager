@@ -4,9 +4,10 @@
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Task } from '@/types/task'
 import { taskService } from '@/services/taskService'
+import { listsAndTagsService } from '@/services/listsAndTagsService'
 import Sidebar from '@/components/Sidebar'
 import TaskList from '@/components/TaskList'
 import TaskDetailsPanel from '@/components/TaskDetailsPanel'
@@ -14,6 +15,8 @@ import { ToastContainer, showToast } from '@/utils/toast'
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([])
+  const [lists, setLists] = useState<string[]>([])
+  const [tags, setTags] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedView, setSelectedView] = useState('today')
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
@@ -23,22 +26,64 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<'priority' | 'status' | null>(null)
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
-  // Fetch tasks on component mount
+  // Fetch all data on component mount
   useEffect(() => {
-    loadTasks()
+    loadAllData()
+    
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+      document.documentElement.setAttribute('data-theme', savedTheme)
+    }
   }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+    localStorage.setItem('theme', newTheme)
+  }
+
+  const loadAllData = async () => {
+    try {
+      setLoading(true)
+      const [tasksData, listsData, tagsData] = await Promise.all([
+        taskService.getAllTasks(),
+        listsAndTagsService.getAllLists(),
+        listsAndTagsService.getAllTags()
+      ])
+      setTasks(Array.isArray(tasksData) ? tasksData : [])
+      setLists(Array.isArray(listsData) ? listsData : [])
+      setTags(Array.isArray(tagsData) ? tagsData : [])
+    } catch (err) {
+      showToast('Failed to load data. Please check if backend is running.', 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const loadTasks = async () => {
     try {
-      setLoading(true)
       const data = await taskService.getAllTasks()
       setTasks(Array.isArray(data) ? data : [])
     } catch (err) {
-      showToast('Failed to load tasks. Please check if backend is running.', 'error')
-      setTasks([])
-    } finally {
-      setLoading(false)
+      showToast('Failed to refresh tasks.', 'error')
+    }
+  }
+
+  const refreshMetadata = async () => {
+    try {
+      const [listsData, tagsData] = await Promise.all([
+        listsAndTagsService.getAllLists(),
+        listsAndTagsService.getAllTags()
+      ])
+      setLists(Array.isArray(listsData) ? listsData : [])
+      setTags(Array.isArray(tagsData) ? tagsData : [])
+    } catch (err) {
+      console.error('Failed to refresh lists and tags:', err)
     }
   }
 
@@ -190,6 +235,10 @@ export default function Home() {
         }}
         onSearchChange={setSearchQuery}
         tasks={tasks}
+        lists={lists}
+        tags={tags}
+        onListsUpdate={refreshMetadata}
+        onTagsUpdate={refreshMetadata}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
         selectedTag={selectedTag}
@@ -201,6 +250,8 @@ export default function Home() {
             setSelectedView('') // Clear view filter when selecting tag
           }
         }}
+        theme={theme}
+        onThemeToggle={toggleTheme}
       />
       
       <div className="main-content">
@@ -234,6 +285,8 @@ export default function Home() {
 
       <TaskDetailsPanel
         task={selectedTask}
+        availableLists={lists}
+        availableTags={tags}
         onClose={() => {
           setSelectedTask(null)
           setIsCreateMode(false)
@@ -241,6 +294,7 @@ export default function Home() {
         onUpdate={handleTaskUpdate}
         onDelete={handleTaskDelete}
         onCreate={handleTaskCreate}
+        onMetadataUpdate={refreshMetadata}
         onCreateMode={isCreateMode}
         onSetCreateMode={setIsCreateMode}
         selectedList={selectedView}

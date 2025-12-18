@@ -17,6 +17,9 @@ interface TaskDetailsPanelProps {
   onClose: () => void
   onUpdate: () => void
   onDelete: () => void
+  availableLists?: string[]
+  availableTags?: string[]
+  onMetadataUpdate?: () => void
   onCreate?: (task: Task) => void
   onCreateMode?: boolean
   onSetCreateMode?: (mode: boolean) => void
@@ -28,6 +31,9 @@ export default function TaskDetailsPanel({
   onClose,
   onUpdate,
   onDelete,
+  availableLists = ['personal', 'work', 'list1'],
+  availableTags = [],
+  onMetadataUpdate,
   onCreate,
   onCreateMode = false,
   onSetCreateMode,
@@ -42,34 +48,12 @@ export default function TaskDetailsPanel({
   const [saving, setSaving] = useState(false)
   const [isCreating, setIsCreating] = useState(onCreateMode)
   const [subtasks, setSubtasks] = useState<Array<{ id: string; title: string; completed: boolean }>>([])
-  const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
-  const [availableTags, setAvailableTags] = useState<string[]>([])
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [newTagInput, setNewTagInput] = useState('')
   const [showAllTags, setShowAllTags] = useState(false)
   
-  useEffect(() => {
-    loadListsAndTags()
-  }, [])
-  
-  const loadListsAndTags = async () => {
-    try {
-      const [listsData, tagsData] = await Promise.all([
-        listsAndTagsService.getAllLists(),
-        listsAndTagsService.getAllTags()
-      ])
-      setAvailableLists(listsData)
-      setAvailableTags(tagsData)
-    } catch (error) {
-      console.error('Error loading lists and tags:', error)
-      // Fallback to default lists
-      setAvailableLists(['personal', 'work', 'list1'])
-      setAvailableTags([])
-    }
-  }
-
   useEffect(() => {
     if (onCreateMode !== undefined) {
       setIsCreating(onCreateMode)
@@ -408,172 +392,172 @@ export default function TaskDetailsPanel({
                   if (e.key === 'Enter' && newTagInput.trim()) {
                     e.preventDefault()
                     const tagName = newTagInput.trim()
-                    if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
-                      const success = await listsAndTagsService.createTag(tagName)
-                      if (success) {
-                        await loadListsAndTags()
+                      if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
+                        const success = await listsAndTagsService.createTag(tagName)
+                        if (success) {
+                          if (onMetadataUpdate) onMetadataUpdate()
+                          setSelectedTags([...selectedTags, tagName])
+                          setNewTagInput('')
+                          showToast('Tag created and added', 'success')
+                        } else {
+                          showToast('Failed to create tag', 'error')
+                        }
+                      } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
                         setSelectedTags([...selectedTags, tagName])
                         setNewTagInput('')
-                        showToast('Tag created and added', 'success')
                       } else {
-                        showToast('Failed to create tag', 'error')
+                        showToast('Tag already added', 'info')
                       }
-                    } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
-                      setSelectedTags([...selectedTags, tagName])
-                      setNewTagInput('')
-                    } else {
-                      showToast('Tag already added', 'info')
                     }
-                  }
-                }}
-              />
-              <button
-                className="add-tag-btn"
-                type="button"
-                onClick={async () => {
-                  if (newTagInput.trim()) {
-                    const tagName = newTagInput.trim()
-                    if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
-                      const success = await listsAndTagsService.createTag(tagName)
-                      if (success) {
-                        await loadListsAndTags()
+                  }}
+                />
+                <button
+                  className="add-tag-btn"
+                  type="button"
+                  onClick={async () => {
+                    if (newTagInput.trim()) {
+                      const tagName = newTagInput.trim()
+                      if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
+                        const success = await listsAndTagsService.createTag(tagName)
+                        if (success) {
+                          if (onMetadataUpdate) onMetadataUpdate()
+                          setSelectedTags([...selectedTags, tagName])
+                          setNewTagInput('')
+                          showToast('Tag created and added', 'success')
+                        } else {
+                          showToast('Failed to create tag', 'error')
+                        }
+                      } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
                         setSelectedTags([...selectedTags, tagName])
                         setNewTagInput('')
-                        showToast('Tag created and added', 'success')
                       } else {
-                        showToast('Failed to create tag', 'error')
+                        showToast('Tag already added', 'info')
                       }
-                    } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
-                      setSelectedTags([...selectedTags, tagName])
-                      setNewTagInput('')
                     } else {
-                      showToast('Tag already added', 'info')
+                      setShowAddTagModal(true)
                     }
-                  } else {
-                    setShowAddTagModal(true)
-                  }
-                }}
-              >
-                + Add
-              </button>
+                  }}
+                >
+                  + Add
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Subtasks Section */}
-        <div className="panel-field">
-          <label className="section-label">Subtasks:</label>
-          <div className="subtasks-list">
-            {subtasks.length === 0 ? (
-              <p style={{ color: '#999', fontSize: '13px', fontStyle: 'italic' }}>No subtasks yet</p>
-            ) : (
-              subtasks.map((subtask) => (
-                <div key={subtask.id} className="subtask-item">
-                  <input
-                    type="checkbox"
-                    checked={subtask.completed}
-                    onChange={(e) => {
-                      setSubtasks(subtasks.map(s =>
-                        s.id === subtask.id ? { ...s, completed: e.target.checked } : s
-                      ))
-                    }}
-                  />
-                  <input
-                    type="text"
-                    value={subtask.title}
-                    onChange={(e) => {
-                      setSubtasks(subtasks.map(s =>
-                        s.id === subtask.id ? { ...s, title: e.target.value } : s
-                      ))
-                    }}
-                    className="subtask-input"
-                    placeholder="Subtask title"
-                  />
-                  <button
-                    type="button"
-                    className="subtask-delete-btn"
-                    onClick={() => {
-                      setSubtasks(subtasks.filter(s => s.id !== subtask.id))
-                    }}
-                    aria-label="Delete subtask"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-          <button 
-            className="add-subtask-btn"
-            type="button"
-            onClick={() => {
-              const newSubtask = {
-                id: Date.now().toString(),
-                title: '',
-                completed: false
-              }
-              setSubtasks([...subtasks, newSubtask])
-            }}
-          >
-            <span>+</span> Add New Subtask
-          </button>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="panel-actions">
-          {!isCreating && (
-            <button
-              className="btn-delete"
-              onClick={handleDeleteClick}
-            >
-              Delete Task
-            </button>
-          )}
-          <button
-            className="btn-save"
-            onClick={handleSave}
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : (isCreating ? 'Create Task' : 'Save changes')}
-          </button>
-          {isCreating && (
-            <button
-              className="btn-cancel"
+          {/* Subtasks Section */}
+          <div className="panel-field">
+            <label className="section-label">Subtasks:</label>
+            <div className="subtasks-list">
+              {subtasks.length === 0 ? (
+                <p style={{ color: '#999', fontSize: '13px', fontStyle: 'italic' }}>No subtasks yet</p>
+              ) : (
+                subtasks.map((subtask) => (
+                  <div key={subtask.id} className="subtask-item">
+                    <input
+                      type="checkbox"
+                      checked={subtask.completed}
+                      onChange={(e) => {
+                        setSubtasks(subtasks.map(s =>
+                          s.id === subtask.id ? { ...s, completed: e.target.checked } : s
+                        ))
+                      }}
+                    />
+                    <input
+                      type="text"
+                      value={subtask.title}
+                      onChange={(e) => {
+                        setSubtasks(subtasks.map(s =>
+                          s.id === subtask.id ? { ...s, title: e.target.value } : s
+                        ))
+                      }}
+                      className="subtask-input"
+                      placeholder="Subtask title"
+                    />
+                    <button
+                      type="button"
+                      className="subtask-delete-btn"
+                      onClick={() => {
+                        setSubtasks(subtasks.filter(s => s.id !== subtask.id))
+                      }}
+                      aria-label="Delete subtask"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+            <button 
+              className="add-subtask-btn"
+              type="button"
               onClick={() => {
-                setIsCreating(false)
-                if (onSetCreateMode) {
-                  onSetCreateMode(false)
+                const newSubtask = {
+                  id: Date.now().toString(),
+                  title: '',
+                  completed: false
                 }
-                setTitle('')
-                setDescription('')
-                setStatus('todo')
-                setPriority('medium')
-                setDueDate('')
-                setList(null)
+                setSubtasks([...subtasks, newSubtask])
               }}
+            >
+              <span>+</span> Add New Subtask
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="panel-actions">
+            {!isCreating && (
+              <button
+                className="btn-delete"
+                onClick={handleDeleteClick}
+              >
+                Delete Task
+              </button>
+            )}
+            <button
+              className="btn-save"
+              onClick={handleSave}
               disabled={saving}
             >
-              Cancel
+              {saving ? 'Saving...' : (isCreating ? 'Create Task' : 'Save changes')}
             </button>
-          )}
+            {isCreating && (
+              <button
+                className="btn-cancel"
+                onClick={() => {
+                  setIsCreating(false)
+                  if (onSetCreateMode) {
+                    onSetCreateMode(false)
+                  }
+                  setTitle('')
+                  setDescription('')
+                  setStatus('todo')
+                  setPriority('medium')
+                  setDueDate('')
+                  setList(null)
+                }}
+                disabled={saving}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-      
-      {/* Add Tag Modal */}
-      <AddTagModal
-        isOpen={showAddTagModal}
-        onClose={() => setShowAddTagModal(false)}
-        onConfirm={async (tagName) => {
-          const success = await listsAndTagsService.createTag(tagName.trim())
-          if (success) {
-            await loadListsAndTags()
-            showToast('Tag added successfully', 'success')
-            setShowAddTagModal(false)
-          } else {
-            showToast('Tag name already exists', 'error')
-          }
-        }}
-      />
+        
+        {/* Add Tag Modal */}
+        <AddTagModal
+          isOpen={showAddTagModal}
+          onClose={() => setShowAddTagModal(false)}
+          onConfirm={async (tagName) => {
+            const success = await listsAndTagsService.createTag(tagName.trim())
+            if (success) {
+              if (onMetadataUpdate) onMetadataUpdate()
+              showToast('Tag added successfully', 'success')
+              setShowAddTagModal(false)
+            } else {
+              showToast('Tag name already exists', 'error')
+            }
+          }}
+        />
       <DeleteConfirmationModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
