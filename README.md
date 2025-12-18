@@ -360,10 +360,13 @@ Both frontend and backend are deployed on Vercel.
 4. Add environment variables:
    - `SUPABASE_URL` - Your Supabase project URL
    - `SUPABASE_KEY` - Your Supabase anon key
-5. Configure build settings:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+5. Vercel will automatically detect Python and use `vercel.json` configuration
 6. Deploy
+
+**Note**: The `backend/vercel.json` file is already configured. Vercel will automatically:
+- Install dependencies from `requirements.txt`
+- Use Python 3.9 (specified in `runtime.txt`)
+- Route all requests to `main.py`
 
 **Backend API**: [https://task-manager-o9by.vercel.app](https://task-manager-o9by.vercel.app)
 
