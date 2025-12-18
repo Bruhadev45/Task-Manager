@@ -53,6 +53,8 @@ async def create_task(task: TaskCreate):
             task_data["due_date"] = str(task_data["due_date"])
         if task_data.get("subtasks") is None:
             task_data["subtasks"] = []
+        if task_data.get("tags") is None:
+            task_data["tags"] = []
         response = supabase.table("tasks").insert(task_data).execute()
         if response.data and len(response.data) > 0:
             return response.data[0]
@@ -84,6 +86,8 @@ async def update_task(task_id: str, task_update: TaskUpdate):
             update_data["due_date"] = str(update_data["due_date"])
         if "subtasks" in update_data and update_data["subtasks"] is None:
             update_data["subtasks"] = []
+        if "tags" in update_data and update_data["tags"] is None:
+            update_data["tags"] = []
         update_data["updated_at"] = datetime.utcnow().isoformat()
         response = supabase.table("tasks").update(update_data).eq("id", task_id).execute()
         if not response.data or len(response.data) == 0:

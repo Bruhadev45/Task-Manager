@@ -101,12 +101,10 @@ export default function Home() {
       )
     }
 
-    // Filter by selected tag (search in title and description)
+    // Filter by selected tag (check if tag is in task.tags array)
     if (selectedTag) {
-      const tagLower = selectedTag.toLowerCase()
       filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(tagLower) ||
-        task.description?.toLowerCase().includes(tagLower)
+        task.tags && Array.isArray(task.tags) && task.tags.includes(selectedTag)
       )
     }
 

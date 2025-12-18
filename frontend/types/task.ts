@@ -24,6 +24,7 @@ export interface Task {
   due_date?: string
   list?: TaskList
   subtasks?: Subtask[]
+  tags?: string[]
   created_at: string
   updated_at: string
 }
@@ -36,6 +37,7 @@ export interface TaskCreate {
   due_date?: string
   list?: TaskList
   subtasks?: Subtask[]
+  tags?: string[]
 }
 
 export interface TaskUpdate {
@@ -46,5 +48,6 @@ export interface TaskUpdate {
   due_date?: string
   list?: TaskList
   subtasks?: Subtask[]
+  tags?: string[]
 }
 

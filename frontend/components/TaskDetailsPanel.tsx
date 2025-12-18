@@ -44,8 +44,10 @@ export default function TaskDetailsPanel({
   const [subtasks, setSubtasks] = useState<Array<{ id: string; title: string; completed: boolean }>>([])
   const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
   const [availableTags, setAvailableTags] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [newTagInput, setNewTagInput] = useState('')
   
   useEffect(() => {
     loadListsAndTags()
@@ -103,6 +105,11 @@ export default function TaskDetailsPanel({
       } else {
         setSubtasks([])
       }
+      if (task.tags && Array.isArray(task.tags)) {
+        setSelectedTags(task.tags)
+      } else {
+        setSelectedTags([])
+      }
     } else if (!task && !isCreating) {
       setTitle('')
       setDescription('')
@@ -111,6 +118,7 @@ export default function TaskDetailsPanel({
       setDueDate('')
       setList(null)
       setSubtasks([])
+      setSelectedTags([])
     } else if (!task && isCreating) {
       setTitle('')
       setDescription('')
@@ -119,6 +127,7 @@ export default function TaskDetailsPanel({
       setDueDate('')
       setList(null)
       setSubtasks([])
+      setSelectedTags([])
     }
   }, [task, isCreating, onSetCreateMode])
 
@@ -164,6 +173,7 @@ export default function TaskDetailsPanel({
           due_date: dueDate || undefined,
           list: list || undefined,
           subtasks: validSubtasks.length > 0 ? validSubtasks : undefined,
+          tags: selectedTags.length > 0 ? selectedTags : undefined,
         }
 
         const createdTask = await taskService.createTask(newTaskData)
@@ -192,6 +202,9 @@ export default function TaskDetailsPanel({
       const currentSubtasks = task.subtasks || []
       const subtasksChanged = JSON.stringify(validSubtasks) !== JSON.stringify(currentSubtasks)
       
+      const currentTags = task.tags || []
+      const tagsChanged = JSON.stringify(selectedTags.sort()) !== JSON.stringify([...currentTags].sort())
+      
       const updateData: TaskUpdate = {
         title: title !== task.title ? title : undefined,
         description: description !== (task.description || '') ? description : undefined,
@@ -200,6 +213,7 @@ export default function TaskDetailsPanel({
         due_date: dueDate !== task.due_date ? dueDate : undefined,
         list: list !== (task.list || null) ? list : undefined,
         subtasks: subtasksChanged ? (validSubtasks.length > 0 ? validSubtasks : []) : undefined,
+        tags: tagsChanged ? (selectedTags.length > 0 ? selectedTags : []) : undefined,
       }
 
       const hasChanges = Object.keys(updateData).some(key => updateData[key as keyof TaskUpdate] !== undefined)
@@ -341,21 +355,110 @@ export default function TaskDetailsPanel({
           <label>Tags</label>
           <div className="tags-display">
             {availableTags.length > 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                {availableTags.map(tag => (
-                  <span key={tag} className="tag-pill" style={{ backgroundColor: '#e0e7ff', color: '#3b82f6' }}>
-                    {tag}
-                  </span>
-                ))}
+              <div className="tags-selection-container">
+                {availableTags.map(tag => {
+                  const isSelected = selectedTags.includes(tag)
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={`tag-select-btn ${isSelected ? 'selected' : ''}`}
+                      onClick={() => {
+                        if (isSelected) {
+                          setSelectedTags(selectedTags.filter(t => t !== tag))
+                        } else {
+                          setSelectedTags([...selectedTags, tag])
+                        }
+                      }}
+                    >
+                      {tag}
+                      {isSelected && <span className="tag-check">✓</span>}
+                    </button>
+                  )
+                })}
               </div>
             )}
-            <button 
-              className="add-tag-btn"
-              type="button"
-              onClick={() => setShowAddTagModal(true)}
-            >
-              + Add Tag
-            </button>
+            <div className="add-tag-input-group">
+              <input
+                type="text"
+                className="new-tag-input"
+                placeholder="Type to create new tag..."
+                value={newTagInput}
+                onChange={(e) => setNewTagInput(e.target.value)}
+                onKeyDown={async (e) => {
+                  if (e.key === 'Enter' && newTagInput.trim()) {
+                    e.preventDefault()
+                    const tagName = newTagInput.trim()
+                    if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
+                      const success = await listsAndTagsService.createTag(tagName)
+                      if (success) {
+                        await loadListsAndTags()
+                        setSelectedTags([...selectedTags, tagName])
+                        setNewTagInput('')
+                        showToast('Tag created and added', 'success')
+                      } else {
+                        showToast('Failed to create tag', 'error')
+                      }
+                    } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
+                      setSelectedTags([...selectedTags, tagName])
+                      setNewTagInput('')
+                    } else {
+                      showToast('Tag already added', 'info')
+                    }
+                  }
+                }}
+              />
+              <button
+                className="add-tag-btn"
+                type="button"
+                onClick={async () => {
+                  if (newTagInput.trim()) {
+                    const tagName = newTagInput.trim()
+                    if (!selectedTags.includes(tagName) && !availableTags.includes(tagName)) {
+                      const success = await listsAndTagsService.createTag(tagName)
+                      if (success) {
+                        await loadListsAndTags()
+                        setSelectedTags([...selectedTags, tagName])
+                        setNewTagInput('')
+                        showToast('Tag created and added', 'success')
+                      } else {
+                        showToast('Failed to create tag', 'error')
+                      }
+                    } else if (availableTags.includes(tagName) && !selectedTags.includes(tagName)) {
+                      setSelectedTags([...selectedTags, tagName])
+                      setNewTagInput('')
+                    } else {
+                      showToast('Tag already added', 'info')
+                    }
+                  } else {
+                    setShowAddTagModal(true)
+                  }
+                }}
+              >
+                + Add
+              </button>
+            </div>
+            {selectedTags.length > 0 && (
+              <div className="selected-tags-display">
+                <div style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>Selected:</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {selectedTags.map(tag => (
+                    <span key={tag} className="tag-pill selected-tag" style={{ backgroundColor: '#3b82f6', color: 'white' }}>
+                      {tag}
+                      <button
+                        type="button"
+                        className="tag-remove-btn"
+                        onClick={() => {
+                          setSelectedTags(selectedTags.filter(t => t !== tag))
+                        }}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

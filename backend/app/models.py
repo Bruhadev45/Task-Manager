@@ -31,6 +31,7 @@ class TaskBase(BaseModel):
     due_date: Optional[date] = Field(None, description="Task due date")
     list: Optional[str] = Field(None, max_length=100, description="Task list")
     subtasks: Optional[List[dict]] = Field(None, description="List of subtasks")
+    tags: Optional[List[str]] = Field(None, description="List of tags")
 
     @field_validator('title')
     @classmethod
@@ -55,6 +56,7 @@ class TaskUpdate(BaseModel):
     due_date: Optional[date] = None
     list: Optional[str] = Field(None, max_length=100, description="Task list (can be default or custom)")
     subtasks: Optional[List[dict]] = Field(None, description="List of subtasks")
+    tags: Optional[List[str]] = Field(None, description="List of tags")
 
     @field_validator('title')
     @classmethod

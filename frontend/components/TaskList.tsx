@@ -182,6 +182,20 @@ export default function TaskList({
                       </span>
                     )}
                     <span className="task-tag tag-priority">{task.priority}</span>
+                    {task.tags && task.tags.length > 0 && (
+                      <div className="task-tags-display">
+                        {task.tags.slice(0, 3).map(tag => (
+                          <span key={tag} className="task-tag-item" title={tag}>
+                            {tag}
+                          </span>
+                        ))}
+                        {task.tags.length > 3 && (
+                          <span className="task-tag-item more-tags" title={task.tags.slice(3).join(', ')}>
+                            +{task.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <span className="task-arrow">→</span>

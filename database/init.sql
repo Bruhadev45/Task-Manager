@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   due_date date,
   list text,
   subtasks jsonb DEFAULT '[]'::jsonb,
+  tags jsonb DEFAULT '[]'::jsonb,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
@@ -23,6 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_tasks_due_date ON tasks(due_date);
 CREATE INDEX IF NOT EXISTS idx_tasks_created_at ON tasks(created_at);
 CREATE INDEX IF NOT EXISTS idx_tasks_list ON tasks(list);
 CREATE INDEX IF NOT EXISTS idx_tasks_subtasks ON tasks USING GIN (subtasks);
+CREATE INDEX IF NOT EXISTS idx_tasks_tags ON tasks USING GIN (tags);
 
 -- Create custom_lists table
 CREATE TABLE IF NOT EXISTS custom_lists (
