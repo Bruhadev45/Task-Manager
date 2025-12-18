@@ -1,0 +1,8 @@
+{
+  "projectId": "e5e101db-24f9-4b8d-8268-172702cb7dac",
+  "createdAt": 1766086662374,
+  "startupCommands": [
+    "cd frontend && npm run dev",
+    "cd backend && source venv/bin/activate && uvicorn main:app --reload --port 8000"
+  ]
+}
