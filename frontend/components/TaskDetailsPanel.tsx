@@ -96,7 +96,6 @@ export default function TaskDetailsPanel({
       } else {
         setDueDate('')
       }
-      // Load subtasks from task
       if (task.subtasks && Array.isArray(task.subtasks)) {
         setSubtasks(task.subtasks)
       } else {
