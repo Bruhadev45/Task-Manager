@@ -32,11 +32,17 @@ export default function Home() {
   useEffect(() => {
     loadAllData()
     
-    // Load theme from localStorage
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-    if (savedTheme) {
-      setTheme(savedTheme)
-      document.documentElement.setAttribute('data-theme', savedTheme)
+    // Load theme from localStorage (with safety check for SSR)
+    try {
+      if (typeof window !== 'undefined') {
+        const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+        if (savedTheme) {
+          setTheme(savedTheme)
+          document.documentElement.setAttribute('data-theme', savedTheme)
+        }
+      }
+    } catch (e) {
+      console.error('Error loading theme:', e)
     }
   }, [])
 
