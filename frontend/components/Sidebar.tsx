@@ -53,7 +53,25 @@ export default function Sidebar({
       const defaultLists = ['personal', 'work', 'list1']
       const customListsData = listsData.filter(list => !defaultLists.includes(list))
       setCustomLists(customListsData)
-      setTags(tagsData)
+      
+      // Keep only first 5 tags, delete the rest
+      if (tagsData.length > 5) {
+        const tagsToKeep = tagsData.slice(0, 5)
+        const tagsToDelete = tagsData.slice(5)
+        
+        // Delete tags beyond the first 5
+        for (const tag of tagsToDelete) {
+          try {
+            await listsAndTagsService.deleteTag(tag)
+          } catch (error) {
+            console.error(`Failed to delete tag ${tag}:`, error)
+          }
+        }
+        
+        setTags(tagsToKeep)
+      } else {
+        setTags(tagsData)
+      }
     } catch (error) {
       console.error('Error loading lists and tags:', error)
       // Fallback to empty arrays
