@@ -78,6 +78,15 @@ if [ -f "$SCRIPT_DIR/.server_pids" ]; then
     fi
 fi
 
+# Clean up port files
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/.backend_port" ]; then
+    rm "$SCRIPT_DIR/.backend_port" 2>/dev/null || true
+fi
+if [ -f "$SCRIPT_DIR/.frontend_port" ]; then
+    rm "$SCRIPT_DIR/.frontend_port" 2>/dev/null || true
+fi
+
 echo ""
 echo -e "${GREEN}✅ All servers stopped${NC}"
 echo ""
