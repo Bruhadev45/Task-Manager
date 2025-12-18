@@ -4,9 +4,9 @@
 
 **Frontend (Vercel)**: [https://task-manager-bruuu.vercel.app](https://task-manager-bruuu.vercel.app)
 
-**Backend API**: [https://your-backend.railway.app](https://your-backend.railway.app) (or your backend URL)
+**Backend API (Vercel)**: [https://task-manager-o9by.vercel.app](https://task-manager-o9by.vercel.app)
 
-**API Documentation**: [https://your-backend.railway.app/docs](https://your-backend.railway.app/docs)
+**API Documentation**: [https://task-manager-o9by.vercel.app/docs](https://task-manager-o9by.vercel.app/docs)
 
 ## 📋 Project Overview
 
@@ -282,21 +282,32 @@ Visit http://localhost:8000/docs for interactive API documentation.
 
 ## 🚀 Deployment
 
-### Frontend Deployment (Vercel)
+Both frontend and backend are deployed on Vercel.
 
-The frontend is deployed on Vercel. To deploy:
+### Frontend Deployment (Vercel)
 
 1. Push your code to GitHub
 2. Import the project in [Vercel](https://vercel.com)
 3. Set the root directory to `frontend`
-4. Add environment variable: `NEXT_PUBLIC_API_URL` (your backend URL)
+4. Add environment variable: `NEXT_PUBLIC_API_URL` (your backend Vercel URL)
 5. Deploy
 
 **Live Demo**: [https://task-manager-bruuu.vercel.app](https://task-manager-bruuu.vercel.app)
 
-### Backend Deployment
+### Backend Deployment (Vercel)
 
-The backend can be deployed on Railway, Render, or Heroku. Make sure to set the `SUPABASE_URL` and `SUPABASE_KEY` environment variables in your deployment platform.
+1. Push your code to GitHub
+2. Import the project in [Vercel](https://vercel.com)
+3. Set the root directory to `backend`
+4. Add environment variables:
+   - `SUPABASE_URL` - Your Supabase project URL
+   - `SUPABASE_KEY` - Your Supabase anon key
+5. Configure build settings:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+6. Deploy
+
+**Backend API**: [https://task-manager-o9by.vercel.app](https://task-manager-o9by.vercel.app)
 
 ## 📚 Additional Documentation
 
