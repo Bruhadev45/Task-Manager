@@ -457,27 +457,6 @@ export default function TaskDetailsPanel({
                 + Add
               </button>
             </div>
-            {selectedTags.length > 0 && (
-              <div className="selected-tags-display">
-                <div style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>Selected:</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {selectedTags.map(tag => (
-                    <span key={tag} className="tag-pill selected-tag" style={{ backgroundColor: '#3b82f6', color: 'white' }}>
-                      {tag}
-                      <button
-                        type="button"
-                        className="tag-remove-btn"
-                        onClick={() => {
-                          setSelectedTags(selectedTags.filter(t => t !== tag))
-                        }}
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
