@@ -40,22 +40,6 @@ export async function getAllTasks(): Promise<Task[]> {
 }
 
 /**
- * Fetches a single task by ID.
- */
-export async function getTask(id: string): Promise<Task> {
-  const response = await fetch(`${API_BASE_URL}/tasks/${id}`)
-  
-  if (!response.ok) {
-    if (response.status === 404) {
-      throw new Error('Task not found')
-    }
-    throw new Error(`Failed to fetch task: ${response.statusText}`)
-  }
-  
-  return response.json()
-}
-
-/**
  * Creates a new task.
  */
 export async function createTask(task: TaskCreate): Promise<Task> {
@@ -113,7 +97,6 @@ export async function deleteTask(id: string): Promise<void> {
 
 export const taskService = {
   getAllTasks,
-  getTask,
   createTask,
   updateTask,
   deleteTask,

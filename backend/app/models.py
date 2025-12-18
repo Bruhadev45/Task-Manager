@@ -22,13 +22,6 @@ class TaskPriority(str, Enum):
     HIGH = "high"
 
 
-class TaskList(str, Enum):
-    """Task list enum (for reference - custom lists supported as strings)."""
-    PERSONAL = "personal"
-    WORK = "work"
-    LIST1 = "list1"
-
-
 class TaskBase(BaseModel):
     """Base task model with common fields."""
     title: str = Field(..., min_length=1, max_length=200, description="Task title")

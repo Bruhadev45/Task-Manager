@@ -34,48 +34,4 @@ export function isOverdue(dueDate?: string, status?: string): boolean {
   return due < today
 }
 
-/**
- * Checks if a task is due within 3 days.
- */
-export function isDueSoon(dueDate?: string, status?: string): boolean {
-  if (!dueDate || status === 'done') return false
-  
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  
-  const due = new Date(dueDate)
-  due.setHours(0, 0, 0, 0)
-  
-  const diffTime = due.getTime() - today.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  
-  return diffDays >= 0 && diffDays <= 3
-}
-
-/**
- * Gets relative time description for a due date.
- */
-export function getRelativeTime(dueDate?: string, status?: string): string {
-  if (!dueDate) return 'No due date'
-  if (status === 'done') return 'Completed'
-  
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  
-  const due = new Date(dueDate)
-  due.setHours(0, 0, 0, 0)
-  
-  const diffTime = due.getTime() - today.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  
-  if (diffDays < 0) {
-    return `Overdue by ${Math.abs(diffDays)} day${Math.abs(diffDays) !== 1 ? 's' : ''}`
-  } else if (diffDays === 0) {
-    return 'Due today'
-  } else if (diffDays === 1) {
-    return 'Due tomorrow'
-  } else {
-    return `Due in ${diffDays} days`
-  }
-}
 

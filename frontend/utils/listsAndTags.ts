@@ -93,18 +93,4 @@ export function addTag(tagName: string): boolean {
   }
 }
 
-/**
- * Delete a tag
- */
-export function deleteTag(tagName: string): void {
-  if (typeof window === 'undefined') return
-  
-  const tags = getTags()
-  const filtered = tags.filter(t => t !== tagName)
-  try {
-    localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(filtered))
-  } catch {
-    // Silent fail
-  }
-}
 
