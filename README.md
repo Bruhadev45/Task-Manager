@@ -367,10 +367,3 @@ Both frontend and backend are deployed on Vercel.
 
 **Backend API**: [https://task-manager-o9by.vercel.app](https://task-manager-o9by.vercel.app)
 
-## 📚 Additional Documentation
-
-- **Database Migration**: See `database/MIGRATION_GUIDE.md` for database setup instructions
-
----
-
-**📋 Requirements Checklist**: See `REQUIREMENTS_CHECKLIST.md` for a complete verification of all requirements.
