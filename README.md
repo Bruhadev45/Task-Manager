@@ -280,13 +280,31 @@ Visit http://localhost:8000/docs for interactive API documentation.
 - The `.env.example` files are provided as templates without real keys
 - In production, restrict CORS origins to your frontend domain
 
+## 🚀 Deployment
+
+### Frontend Deployment (Vercel)
+
+The frontend is deployed on Vercel. To deploy:
+
+1. Push your code to GitHub
+2. Import the project in [Vercel](https://vercel.com)
+3. Set the root directory to `frontend`
+4. Add environment variable: `NEXT_PUBLIC_API_URL` (your backend URL)
+5. Deploy
+
+**Live Demo**: [https://your-app.vercel.app](https://your-app.vercel.app)
+
+For detailed deployment instructions, see `VERCEL_ENV_SETUP.md`.
+
+### Backend Deployment
+
+The backend can be deployed on Railway, Render, or Heroku. See `DEPLOYMENT_TROUBLESHOOTING.md` for detailed instructions.
+
 ## 📚 Additional Documentation
 
-- **Deployment**: See `VERCEL_DEPLOYMENT.md` for Vercel deployment guide
-- **Troubleshooting**: See `docs/TROUBLESHOOTING.md` for common issues and solutions
-- **Project Structure**: See `docs/PROJECT_STRUCTURE.md` for detailed code organization
-- **Coding Standards**: See `docs/CODING_STANDARDS.md` for coding best practices
-- **Requirements**: See `REQUIREMENTS_CHECKLIST.md` for requirements verification
+- **Deployment Setup**: See `VERCEL_ENV_SETUP.md` for Vercel environment variable configuration
+- **Deployment Troubleshooting**: See `DEPLOYMENT_TROUBLESHOOTING.md` for common deployment issues
+- **Database Migration**: See `database/MIGRATION_GUIDE.md` for database setup instructions
 
 ---
 
