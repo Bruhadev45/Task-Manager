@@ -404,25 +404,32 @@ For more detailed troubleshooting, see `docs/TROUBLESHOOTING.md`.
 
 ## 📸 Screenshots
 
-### Main Dashboard - Three-Column Layout
+### Create Task View
 
-![Main Dashboard](screenshots/main-dashboard.png)
+![Create Task](screenshots/Create_Task.png)
 
-*The main dashboard showing the three-column layout:*
-- **Left Sidebar**: Navigation with Today, Upcoming, Lists (Personal, Work, List 1, Project Xyz), and Tags
+*The create task view showing the three-column layout:*
+- **Left Sidebar**: Navigation with Today (7 tasks), Upcoming (26 tasks), Lists (Personal, Work, List 1, Project Xyz), and Tags
 - **Middle Panel**: Task list for the selected list (Work) with 13 tasks, showing checkboxes, due dates, and priority tags
-- **Right Panel**: New task creation form with all fields including title, description, status, priority, list, due date, tags, and subtasks
+- **Right Panel**: New task creation form with all fields including title, description, status (Todo), priority (Medium), list (Work), due date, tags, and subtasks
 
-### Task Details View
+### Edit Task View
 
-![Task Details](screenshots/task-details.png)
+![Edit Task](screenshots/Edit_task.png)
 
-*Task details panel showing:*
-- **Selected Task**: "Setup development environment" with full details
-- **Task Information**: Description, status (Todo), priority (High), list (Work), and due date (13/12/2025)
-- **Tags**: Existing tags (XYZ, bcd) with ability to add new tags
-- **Subtasks**: Subtask management with "work on it" subtask and ability to add more
-- **Actions**: Delete task and save changes buttons
+*The edit task view showing task details:*
+- **Left Sidebar**: Navigation panel with task counts and lists
+- **Middle Panel**: Task list with "Setup development environment" selected (highlighted)
+- **Right Panel**: Task details panel showing:
+  - **Task Title**: "Setup development environment"
+  - **Description**: Full task description
+  - **Status**: Todo (dropdown)
+  - **Priority**: High (dropdown)
+  - **List**: Work (dropdown)
+  - **Due Date**: 13/12/2025
+  - **Tags**: XYZ and bcd tags with ability to add more
+  - **Subtasks**: "work on it" subtask with delete option
+  - **Actions**: Delete task and save changes buttons
 
 ---
 
