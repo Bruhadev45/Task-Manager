@@ -47,6 +47,9 @@ export default function TaskDetailsPanel({
   const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
   const [availableTags, setAvailableTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
+  const [useNaturalLanguage, setUseNaturalLanguage] = useState(false)
+  const [naturalLanguageText, setNaturalLanguageText] = useState('')
+  const [parsing, setParsing] = useState(false)
   
   // Load available lists and tags
   useEffect(() => {
@@ -282,16 +285,119 @@ export default function TaskDetailsPanel({
       </div>
 
       <div className="panel-content">
-        {/* Task Title */}
-        <div className="panel-field">
-          <input
-            type="text"
-            className="task-title-input"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Task title"
-          />
-        </div>
+        {/* Natural Language Toggle (only show when creating) */}
+        {isCreating && (
+          <div className="panel-field" style={{ marginBottom: '16px' }}>
+            <button
+              type="button"
+              className="btn-natural-language"
+              onClick={() => {
+                setUseNaturalLanguage(!useNaturalLanguage)
+                if (!useNaturalLanguage) {
+                  // Clear form when switching to natural language mode
+                  setTitle('')
+                  setDescription('')
+                  setStatus('todo')
+                  setPriority('medium')
+                  setDueDate('')
+                  setList(null)
+                } else {
+                  setNaturalLanguageText('')
+                }
+              }}
+              style={{
+                background: useNaturalLanguage ? '#3b82f6' : '#e5e7eb',
+                color: useNaturalLanguage ? 'white' : '#374151',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+              {useNaturalLanguage ? '📝 Use Form' : '✨ Natural Language'}
+            </button>
+          </div>
+        )}
+
+        {/* Natural Language Input */}
+        {isCreating && useNaturalLanguage ? (
+          <div className="panel-field">
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontSize: '14px' }}>
+              Describe your task in natural language:
+            </label>
+            <textarea
+              value={naturalLanguageText}
+              onChange={(e) => setNaturalLanguageText(e.target.value)}
+              placeholder="Example: Call John tomorrow about the project proposal, high priority"
+              rows={4}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid #d1d5db',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontFamily: 'inherit',
+                resize: 'vertical'
+              }}
+            />
+            <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                className="btn-save"
+                onClick={handleParseNaturalLanguage}
+                disabled={parsing || !naturalLanguageText.trim()}
+                style={{
+                  background: parsing ? '#9ca3af' : '#3b82f6',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '6px',
+                  cursor: parsing ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
+                {parsing ? 'Parsing...' : '✨ Parse Task'}
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => {
+                  setUseNaturalLanguage(false)
+                  setNaturalLanguageText('')
+                }}
+                style={{
+                  background: '#e5e7eb',
+                  color: '#374151',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+            <p style={{ marginTop: '12px', fontSize: '12px', color: '#6b7280' }}>
+              💡 Try: "Call John tomorrow about the project proposal, high priority" or "Buy groceries next week, personal"
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Task Title */}
+            <div className="panel-field">
+              <input
+                type="text"
+                className="task-title-input"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Task title"
+              />
+            </div>
 
         {/* Description */}
         <div className="panel-field">
@@ -437,6 +543,8 @@ export default function TaskDetailsPanel({
             <span>+</span> Add New Subtask
           </button>
         </div>
+          </>
+        )}
 
         {/* Action Buttons */}
         <div className="panel-actions">

@@ -135,6 +135,37 @@ export async function deleteTask(id: string): Promise<void> {
   }
 }
 
+/**
+ * Parses natural language text into structured task fields.
+ * 
+ * @param text - Natural language task description
+ * @returns Promise resolving to parsed task data
+ * @throws Error if parsing fails
+ */
+export async function parseNaturalLanguage(text: string): Promise<{
+  title: string
+  description?: string
+  status: 'todo' | 'in-progress' | 'done'
+  priority: 'low' | 'medium' | 'high'
+  due_date?: string
+  list?: string | null
+}> {
+  const response = await fetch(`${API_BASE_URL}/tasks/parse-natural-language`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text }),
+  })
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.detail || `Failed to parse natural language: ${response.statusText}`)
+  }
+  
+  return response.json()
+}
+
 // Export a service object for convenience
 export const taskService = {
   getAllTasks,
@@ -142,5 +173,6 @@ export const taskService = {
   createTask,
   updateTask,
   deleteTask,
+  parseNaturalLanguage,
 }
 
