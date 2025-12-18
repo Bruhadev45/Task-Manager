@@ -129,9 +129,11 @@ cp .env.example .env
 ```
 
 Edit `backend/.env` and add your Supabase credentials:
+
+**Sample `backend/.env` file:**
 ```env
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_KEY=your_supabase_anon_key
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_KEY=your_supabase_anon_key_here
 ```
 
 **Note**: The `.env.example` file is provided as a template. Do NOT commit your actual `.env` file with real keys.
@@ -170,6 +172,8 @@ cp .env.local.example .env.local
 ```
 
 Edit `frontend/.env.local` and set the API URL:
+
+**Sample `frontend/.env.local` file:**
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
