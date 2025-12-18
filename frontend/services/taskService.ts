@@ -1,26 +1,18 @@
 /**
  * Task service - handles all API communication for tasks.
- * 
- * This module centralizes API calls and provides a clean interface
- * for components to interact with the backend.
  */
 
 import { Task, TaskCreate, TaskUpdate } from '@/types/task'
 
-// Get API base URL from environment variable
-// Defaults to localhost for development
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 /**
  * Fetches all tasks from the backend.
- * 
- * @returns Promise resolving to array of tasks
- * @throws Error if request fails
  */
 export async function getAllTasks(): Promise<Task[]> {
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000)
     
     const response = await fetch(`${API_BASE_URL}/tasks`, {
       method: 'GET',
@@ -49,10 +41,6 @@ export async function getAllTasks(): Promise<Task[]> {
 
 /**
  * Fetches a single task by ID.
- * 
- * @param id - Task UUID
- * @returns Promise resolving to task object
- * @throws Error if task not found or request fails
  */
 export async function getTask(id: string): Promise<Task> {
   const response = await fetch(`${API_BASE_URL}/tasks/${id}`)
@@ -69,10 +57,6 @@ export async function getTask(id: string): Promise<Task> {
 
 /**
  * Creates a new task.
- * 
- * @param task - Task data to create
- * @returns Promise resolving to created task
- * @throws Error if creation fails
  */
 export async function createTask(task: TaskCreate): Promise<Task> {
   const response = await fetch(`${API_BASE_URL}/tasks`, {
@@ -93,11 +77,6 @@ export async function createTask(task: TaskCreate): Promise<Task> {
 
 /**
  * Updates an existing task.
- * 
- * @param id - Task UUID
- * @param task - Task data to update (only provided fields will be updated)
- * @returns Promise resolving to updated task
- * @throws Error if update fails
  */
 export async function updateTask(id: string, task: TaskUpdate): Promise<Task> {
   const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
@@ -118,9 +97,6 @@ export async function updateTask(id: string, task: TaskUpdate): Promise<Task> {
 
 /**
  * Deletes a task.
- * 
- * @param id - Task UUID
- * @throws Error if deletion fails
  */
 export async function deleteTask(id: string): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
@@ -135,7 +111,6 @@ export async function deleteTask(id: string): Promise<void> {
   }
 }
 
-// Export a service object for convenience
 export const taskService = {
   getAllTasks,
   getTask,

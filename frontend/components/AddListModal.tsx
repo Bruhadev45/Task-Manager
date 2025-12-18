@@ -1,7 +1,5 @@
 /**
  * AddListModal component - Modal for adding a new list.
- * 
- * Provides a clean UI for creating new lists instead of using browser prompts.
  */
 
 'use client'

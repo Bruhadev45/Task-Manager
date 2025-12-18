@@ -1,7 +1,5 @@
 /**
  * AddTagModal component - Modal for adding a new tag.
- * 
- * Provides a clean UI for creating new tags instead of using browser prompts.
  */
 
 'use client'

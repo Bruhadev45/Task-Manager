@@ -1,9 +1,5 @@
 /**
  * Main page with three-column layout.
- * 
- * Left: Sidebar navigation
- * Middle: Task list
- * Right: Task details panel
  */
 
 'use client'
@@ -34,25 +30,20 @@ export default function Home() {
     try {
       setLoading(true)
       const data = await taskService.getAllTasks()
-      // Ensure we have an array
       setTasks(Array.isArray(data) ? data : [])
     } catch (err) {
       showToast('Failed to load tasks. Please check if backend is running.', 'error')
-      // Set empty array on error so UI doesn't stay in loading state
       setTasks([])
     } finally {
       setLoading(false)
     }
   }
 
-  // Filter tasks based on selected view
   const getFilteredTasks = () => {
     let filtered = [...tasks]
 
-    // Apply view filter
     switch (selectedView) {
       case 'today': {
-        // Get today's date in local timezone (YYYY-MM-DD format)
         const now = new Date()
         const year = now.getFullYear()
         const month = String(now.getMonth() + 1).padStart(2, '0')
@@ -60,18 +51,13 @@ export default function Home() {
         const todayStr = `${year}-${month}-${day}`
         
         filtered = filtered.filter(t => {
-          // Include tasks without due dates
           if (!t.due_date) return true
           
-          // Normalize task due_date to YYYY-MM-DD format for comparison
-          // Handle both date strings and Date objects
           let taskDateStr = t.due_date
           if (taskDateStr.includes('T')) {
-            // If it's a full ISO string, extract just the date part
             taskDateStr = taskDateStr.split('T')[0]
           }
           
-          // Compare normalized dates
           return taskDateStr === todayStr
         })
         break
@@ -98,14 +84,12 @@ export default function Home() {
         filtered = filtered.filter(t => t.list === 'list1')
         break
       default:
-        // Check if it's a custom list
         if (selectedView && selectedView !== 'today' && selectedView !== 'upcoming' && selectedView !== 'calendar') {
           filtered = filtered.filter(t => t.list === selectedView)
         }
         break
     }
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(task =>
@@ -118,14 +102,12 @@ export default function Home() {
   }
 
   const handleTaskSelect = (task: Task) => {
-    // Reset create mode when selecting a task
     setIsCreateMode(false)
     setSelectedTask(task)
   }
 
   const handleTaskUpdate = () => {
     loadTasks()
-    // Keep the same task selected if it still exists
     if (selectedTask) {
       const updated = tasks.find(t => t.id === selectedTask.id)
       if (updated) {
@@ -141,7 +123,6 @@ export default function Home() {
 
   const handleTaskCreate = async (newTask: Task) => {
     await loadTasks()
-    // Select the newly created task
     setSelectedTask(newTask)
     setIsCreateMode(false)
   }

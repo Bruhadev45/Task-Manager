@@ -1,7 +1,5 @@
 """
 Task router - handles all task-related API endpoints.
-
-This module provides CRUD operations for tasks.
 """
 
 from fastapi import APIRouter, HTTPException, status

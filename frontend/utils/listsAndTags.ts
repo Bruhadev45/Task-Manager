@@ -1,7 +1,5 @@
 /**
  * Utility functions for managing custom lists and tags.
- * 
- * Stores custom lists and tags in localStorage for persistence.
  */
 
 const LISTS_STORAGE_KEY = 'task_manager_custom_lists'
@@ -30,15 +28,14 @@ export function addCustomList(listName: string): boolean {
   const trimmed = listName.trim().toLowerCase()
   if (!trimmed) return false
   
-  // Check if list already exists (including default lists)
   const defaultLists = ['personal', 'work', 'list1']
   if (defaultLists.includes(trimmed)) {
-    return false // Can't add default lists
+    return false
   }
   
   const customLists = getCustomLists()
   if (customLists.includes(trimmed)) {
-    return false // Already exists
+    return false
   }
   
   try {
@@ -84,7 +81,7 @@ export function addTag(tagName: string): boolean {
   
   const tags = getTags()
   if (tags.includes(trimmed)) {
-    return false // Already exists
+    return false
   }
   
   try {
@@ -107,7 +104,7 @@ export function deleteTag(tagName: string): void {
   try {
     localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(filtered))
   } catch {
-    // Ignore errors
+    // Silent fail
   }
 }
 

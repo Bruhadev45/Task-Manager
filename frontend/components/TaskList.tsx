@@ -1,7 +1,5 @@
 /**
  * TaskList component - Middle column displaying tasks.
- * 
- * Shows list of tasks with checkboxes, dates, tags, and subtask counts.
  */
 
 'use client'
@@ -40,7 +38,6 @@ export default function TaskList({
       case 'work': return 'Work'
       case 'list1': return 'List 1'
       default: 
-        // Custom list - capitalize first letter
         return selectedView ? selectedView.charAt(0).toUpperCase() + selectedView.slice(1) : 'Tasks'
     }
   }
@@ -50,13 +47,12 @@ export default function TaskList({
   }
 
   const handleTaskToggle = async (task: Task, checked: boolean) => {
-    // Toggle task status between todo and done
     try {
       const newStatus = checked ? 'done' : 'todo'
       await taskService.updateTask(task.id, { status: newStatus })
       onRefresh()
     } catch (err) {
-      // Error handled silently - task toggle is a convenience feature
+      // Silent fail
     }
   }
 
@@ -118,9 +114,6 @@ export default function TaskList({
                         📅 {formatDate(task.due_date)}
                       </span>
                     )}
-                    <span className="task-meta-item">
-                      {task.status === 'in-progress' ? '🔄' : ''} {task.priority}
-                    </span>
                     <span className="task-tag tag-priority">{task.priority}</span>
                   </div>
                 </div>

@@ -1,6 +1,5 @@
 /**
  * Toast notification system for user feedback.
- * Simple, lightweight toast messages for success/error notifications.
  */
 
 'use client'
@@ -25,7 +24,6 @@ function notifyListeners() {
 
 /**
  * Shows a toast notification.
- * Automatically removes after 4 seconds.
  */
 export function showToast(message: string, type: ToastType = 'info') {
   const id = `toast-${++toastIdCounter}`
@@ -34,14 +32,13 @@ export function showToast(message: string, type: ToastType = 'info') {
   toasts = [...toasts, toast]
   notifyListeners()
   
-  // Auto-remove after 4 seconds
   setTimeout(() => {
     removeToast(id)
   }, 4000)
 }
 
 /**
- * Removes a toast by ID.
+ * Removes a toast notification.
  */
 function removeToast(id: string) {
   toasts = toasts.filter(t => t.id !== id)
@@ -49,7 +46,7 @@ function removeToast(id: string) {
 }
 
 /**
- * React hook to use toast notifications.
+ * Hook to use toast notifications.
  */
 export function useToast() {
   const [toastList, setToastList] = useState<Toast[]>([])
@@ -60,7 +57,7 @@ export function useToast() {
     }
     
     toastListeners.push(listener)
-    listener(toasts) // Initial state
+    listener(toasts)
     
     return () => {
       const index = toastListeners.indexOf(listener)
@@ -82,7 +79,7 @@ export function useToast() {
 }
 
 /**
- * Toast container component to render toasts.
+ * Toast container component.
  */
 export function ToastContainer() {
   const { toasts, removeToast } = useToast()

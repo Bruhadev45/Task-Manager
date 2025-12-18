@@ -1,18 +1,15 @@
 /**
  * Date utility functions for formatting and comparing dates.
- * Handles date formatting, overdue detection, and relative time display.
  */
 
 /**
  * Formats a date string into a readable format.
- * Returns "No due date" if date is not provided.
  */
 export function formatDate(dateString?: string): string {
   if (!dateString) return 'No due date'
   
   try {
     const date = new Date(dateString)
-    // Format as DD-MM-YY (matching the design)
     const day = String(date.getDate()).padStart(2, '0')
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const year = String(date.getFullYear()).slice(-2)
@@ -24,7 +21,6 @@ export function formatDate(dateString?: string): string {
 
 /**
  * Checks if a task is overdue.
- * Returns true if the due date is in the past and task is not done.
  */
 export function isOverdue(dueDate?: string, status?: string): boolean {
   if (!dueDate || status === 'done') return false
@@ -39,7 +35,7 @@ export function isOverdue(dueDate?: string, status?: string): boolean {
 }
 
 /**
- * Checks if a task is due soon (within 3 days).
+ * Checks if a task is due within 3 days.
  */
 export function isDueSoon(dueDate?: string, status?: string): boolean {
   if (!dueDate || status === 'done') return false
@@ -57,7 +53,7 @@ export function isDueSoon(dueDate?: string, status?: string): boolean {
 }
 
 /**
- * Gets relative time description (e.g., "Due in 2 days", "Overdue by 5 days").
+ * Gets relative time description for a due date.
  */
 export function getRelativeTime(dueDate?: string, status?: string): string {
   if (!dueDate) return 'No due date'

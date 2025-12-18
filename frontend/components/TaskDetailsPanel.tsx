@@ -1,8 +1,5 @@
 /**
  * TaskDetailsPanel component - Right panel for viewing/editing task details.
- * 
- * Displays task information and allows inline editing.
- * Also supports creating new tasks when no task is selected.
  */
 
 'use client'
@@ -19,10 +16,10 @@ interface TaskDetailsPanelProps {
   onClose: () => void
   onUpdate: () => void
   onDelete: () => void
-  onCreate?: (task: Task) => void // Callback when a new task is created
-  onCreateMode?: boolean // External control for create mode
-  onSetCreateMode?: (mode: boolean) => void // Callback to set create mode
-  selectedList?: string // List context when creating from a list view
+  onCreate?: (task: Task) => void
+  onCreateMode?: boolean
+  onSetCreateMode?: (mode: boolean) => void
+  selectedList?: string
 }
 
 export default function TaskDetailsPanel({
@@ -42,18 +39,16 @@ export default function TaskDetailsPanel({
   const [dueDate, setDueDate] = useState('')
   const [list, setList] = useState<TaskList>(null)
   const [saving, setSaving] = useState(false)
-  const [isCreating, setIsCreating] = useState(onCreateMode) // Track if we're in create mode
+  const [isCreating, setIsCreating] = useState(onCreateMode)
   const [subtasks, setSubtasks] = useState<Array<{ id: string; title: string; completed: boolean }>>([])
   const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
   const [availableTags, setAvailableTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   
-  // Load available lists and tags
   useEffect(() => {
     setAvailableLists(getAllLists())
     setAvailableTags(getTags())
     
-    // Listen for updates
     const handleListsUpdate = () => {
       setAvailableLists(getAllLists())
     }
@@ -70,26 +65,21 @@ export default function TaskDetailsPanel({
     }
   }, [])
 
-  // Sync external create mode
   useEffect(() => {
     if (onCreateMode !== undefined) {
       setIsCreating(onCreateMode)
     }
   }, [onCreateMode])
 
-  // Set list when creating from a list view
   useEffect(() => {
     if (isCreating && selectedList) {
-      // Check if it's a valid list (default or custom)
       if (availableLists.includes(selectedList)) {
         setList(selectedList)
       }
     }
   }, [isCreating, selectedList, availableLists])
 
-  // Update form when task changes
   useEffect(() => {
-    // If a task is selected, always exit create mode and load the task
     if (task) {
       setIsCreating(false)
       if (onSetCreateMode) {
@@ -113,7 +103,6 @@ export default function TaskDetailsPanel({
         setSubtasks([])
       }
     } else if (!task && !isCreating) {
-      // Reset form when no task is selected and not creating
       setTitle('')
       setDescription('')
       setStatus('todo')
@@ -122,7 +111,6 @@ export default function TaskDetailsPanel({
       setList(null)
       setSubtasks([])
     } else if (!task && isCreating) {
-      // Reset form when in create mode
       setTitle('')
       setDescription('')
       setStatus('todo')
@@ -133,7 +121,6 @@ export default function TaskDetailsPanel({
     }
   }, [task, isCreating, onSetCreateMode])
 
-  // Show create form or empty state
   if (!task && !isCreating) {
     return (
       <div className="task-details-panel empty">
@@ -167,7 +154,6 @@ export default function TaskDetailsPanel({
           return
         }
 
-        // Filter out empty subtasks before saving
         const validSubtasks = subtasks.filter(s => s.title.trim().length > 0)
         
         const newTaskData: TaskCreate = {
@@ -183,7 +169,6 @@ export default function TaskDetailsPanel({
         const createdTask = await taskService.createTask(newTaskData)
         showToast('Task created successfully', 'success')
         
-        // Reset form
         setTitle('')
         setDescription('')
         setStatus('todo')
@@ -195,21 +180,16 @@ export default function TaskDetailsPanel({
           onSetCreateMode(false)
         }
         
-        // Notify parent to refresh and select the new task
         if (onCreate) {
           onCreate(createdTask)
         } else {
-          onUpdate() // Fallback to refresh
+          onUpdate()
         }
         return
       }
 
-      // If updating existing task
-      // Filter out empty subtasks before saving
       const validSubtasks = subtasks.filter(s => s.title.trim().length > 0)
       const currentSubtasks = task.subtasks || []
-      
-      // Check if subtasks have changed
       const subtasksChanged = JSON.stringify(validSubtasks) !== JSON.stringify(currentSubtasks)
       
       const updateData: TaskUpdate = {
@@ -238,7 +218,7 @@ export default function TaskDetailsPanel({
   }
 
   const handleDelete = async () => {
-    if (!task) return // Guard against null task
+    if (!task) return
     
     if (confirm('Are you sure you want to delete this task?')) {
       try {

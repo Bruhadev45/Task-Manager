@@ -1,7 +1,5 @@
 /**
  * Sidebar component - Left navigation panel.
- * 
- * Displays menu, tasks navigation, lists, tags, and settings.
  */
 
 'use client'
@@ -29,13 +27,11 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
   const [showAddListModal, setShowAddListModal] = useState(false)
   const [showAddTagModal, setShowAddTagModal] = useState(false)
   
-  // Load custom lists and tags on mount
   useEffect(() => {
     setCustomLists(getCustomLists())
     setTags(getTags())
   }, [])
   
-  // Refresh custom lists and tags when window storage changes
   useEffect(() => {
     const handleListsUpdate = () => {
       setCustomLists(getCustomLists())
@@ -62,10 +58,7 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
     }
   }
 
-  // Calculate task counts for different views
-  // These counts should match the filtering logic in page.tsx
   const taskCounts = useMemo(() => {
-    // Get today's date in local timezone (YYYY-MM-DD format)
     const now = new Date()
     const year = now.getFullYear()
     const month = String(now.getMonth() + 1).padStart(2, '0')
@@ -77,20 +70,16 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
     tomorrow.setHours(0, 0, 0, 0)
     
     const todayCount = tasks.filter(task => {
-      if (!task.due_date) return true // Tasks without due dates count as "today"
+      if (!task.due_date) return true
       
-      // Normalize task due_date to YYYY-MM-DD format for comparison
       let taskDateStr = task.due_date
       if (taskDateStr.includes('T')) {
-        // If it's a full ISO string, extract just the date part
         taskDateStr = taskDateStr.split('T')[0]
       }
       
-      // Compare normalized dates
       return taskDateStr === todayStr
     }).length
 
-    // Upcoming: tasks with due dates in the future (from tomorrow onwards)
     const upcomingCount = tasks.filter(task => {
       if (!task.due_date) return false
       const due = new Date(task.due_date)
@@ -98,12 +87,10 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
       return due >= tomorrow
     }).length
 
-    // Count tasks by list
     const personalCount = tasks.filter(task => task.list === 'personal').length
     const workCount = tasks.filter(task => task.list === 'work').length
     const list1Count = tasks.filter(task => task.list === 'list1').length
     
-    // Count tasks for custom lists
     const customListCounts: Record<string, number> = {}
     customLists.forEach(listName => {
       customListCounts[listName] = tasks.filter(task => task.list === listName).length
@@ -123,7 +110,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
     const success = addCustomList(listName)
     if (success) {
       setCustomLists(getCustomLists())
-      // Dispatch custom event for same-window updates
       window.dispatchEvent(new Event('listsUpdated'))
       showToast('List added successfully', 'success')
       setShowAddListModal(false)
@@ -146,7 +132,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
 
   return (
     <div className={`sidebar ${!isOpen ? 'sidebar-closed' : ''}`}>
-      {/* Header */}
       <div className="sidebar-header">
         <h2>Menu</h2>
         <button 
@@ -162,7 +147,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
         </button>
       </div>
 
-      {/* Search */}
       <div className="sidebar-search">
         <span className="search-icon">🔍</span>
         <input
@@ -173,7 +157,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
         />
       </div>
 
-      {/* Tasks Section */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">TASKS</div>
         <div
@@ -201,7 +184,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
         </div>
       </div>
 
-      {/* Lists Section */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">LISTS</div>
         <div
@@ -229,7 +211,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
           <span className="sidebar-badge">{taskCounts.list1}</span>
         </div>
         {customLists.map((listName, index) => {
-          // Generate a color for custom lists
           const colors = ['#10b981', '#8b5cf6', '#f59e0b', '#ec4899', '#06b6d4']
           const color = colors[index % colors.length]
           return (
@@ -250,7 +231,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
         </div>
       </div>
 
-      {/* Tags Section */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">TAGS</div>
         {tags.length > 0 && (
@@ -272,7 +252,6 @@ export default function Sidebar({ selectedView, onViewChange, onSearchChange, ta
         </div>
       </div>
 
-      {/* Modals */}
       <AddListModal
         isOpen={showAddListModal}
         onClose={() => setShowAddListModal(false)}
