@@ -17,7 +17,7 @@ This is intentional to prevent duplicate errors if you run the migration multipl
 
 ### Option 1: Run Verification Queries
 
-Run `database/verify_lists_and_tags.sql` in Supabase SQL Editor:
+Verify the migration by running this query in Supabase SQL Editor:
 
 ```sql
 -- Check if tables exist
