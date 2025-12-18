@@ -294,16 +294,12 @@ The frontend is deployed on Vercel. To deploy:
 
 **Live Demo**: [https://your-app.vercel.app](https://your-app.vercel.app)
 
-For detailed deployment instructions, see `VERCEL_ENV_SETUP.md`.
-
 ### Backend Deployment
 
-The backend can be deployed on Railway, Render, or Heroku. See `DEPLOYMENT_TROUBLESHOOTING.md` for detailed instructions.
+The backend can be deployed on Railway, Render, or Heroku. Make sure to set the `SUPABASE_URL` and `SUPABASE_KEY` environment variables in your deployment platform.
 
 ## 📚 Additional Documentation
 
-- **Deployment Setup**: See `VERCEL_ENV_SETUP.md` for Vercel environment variable configuration
-- **Deployment Troubleshooting**: See `DEPLOYMENT_TROUBLESHOOTING.md` for common deployment issues
 - **Database Migration**: See `database/MIGRATION_GUIDE.md` for database setup instructions
 
 ---
