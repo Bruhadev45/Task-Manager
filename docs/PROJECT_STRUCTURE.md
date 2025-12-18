@@ -44,11 +44,10 @@ Task Manager/
 │   └── next.config.js         # Next.js configuration
 │
 ├── database/                  # Database schema and migrations
-│   ├── schema.sql             # Complete database schema
-│   ├── init.sql               # Schema + seed data (one file)
-│   ├── seed.sql               # Seed data only
-│   ├── migration_add_list.sql      # Migration: Add list column
-│   └── migration_add_subtasks.sql  # Migration: Add subtasks column
+│   ├── schema.sql                        # Complete database schema
+│   ├── init.sql                          # Schema + seed data (one file)
+│   ├── seed.sql                          # Seed data only
+│   └── migration_add_list_and_subtasks.sql  # Migration: Add list and subtasks columns
 │
 ├── docs/                      # Documentation
 │   ├── TROUBLESHOOTING.md     # Troubleshooting guide
