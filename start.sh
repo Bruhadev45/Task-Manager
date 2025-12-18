@@ -46,8 +46,22 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     
     echo ""
     echo -e "${GREEN}✅ Backend and Frontend servers are starting in separate terminal windows${NC}"
-    echo -e "${BLUE}🌐 Backend: http://localhost:8000${NC}"
-    echo -e "${BLUE}🌐 Frontend: http://localhost:3000${NC}"
+    
+    # Wait a moment for ports to be determined
+    sleep 2
+    
+    # Read ports from files if they exist
+    BACKEND_PORT=8000
+    FRONTEND_PORT=3000
+    if [ -f "$SCRIPT_DIR/.backend_port" ]; then
+        BACKEND_PORT=$(cat "$SCRIPT_DIR/.backend_port")
+    fi
+    if [ -f "$SCRIPT_DIR/.frontend_port" ]; then
+        FRONTEND_PORT=$(cat "$SCRIPT_DIR/.frontend_port")
+    fi
+    
+    echo -e "${BLUE}🌐 Backend: http://localhost:$BACKEND_PORT${NC}"
+    echo -e "${BLUE}🌐 Frontend: http://localhost:$FRONTEND_PORT${NC}"
     echo ""
     echo -e "${YELLOW}💡 Close the terminal windows to stop the servers${NC}"
     echo -e "${YELLOW}💡 Or run ./stop.sh to stop all servers${NC}"
@@ -78,9 +92,22 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     FRONTEND_PID=$!
     echo -e "${GREEN}✅ Frontend started (PID: $FRONTEND_PID)${NC}"
     
+    # Wait a moment for ports to be determined
+    sleep 2
+    
+    # Read ports from files if they exist
+    BACKEND_PORT=8000
+    FRONTEND_PORT=3000
+    if [ -f "$SCRIPT_DIR/.backend_port" ]; then
+        BACKEND_PORT=$(cat "$SCRIPT_DIR/.backend_port")
+    fi
+    if [ -f "$SCRIPT_DIR/.frontend_port" ]; then
+        FRONTEND_PORT=$(cat "$SCRIPT_DIR/.frontend_port")
+    fi
+    
     echo ""
-    echo -e "${BLUE}🌐 Backend: http://localhost:8000${NC}"
-    echo -e "${BLUE}🌐 Frontend: http://localhost:3000${NC}"
+    echo -e "${BLUE}🌐 Backend: http://localhost:$BACKEND_PORT${NC}"
+    echo -e "${BLUE}🌐 Frontend: http://localhost:$FRONTEND_PORT${NC}"
     echo ""
     echo -e "${GREEN}📝 Logs:${NC}"
     echo "   Backend:  tail -f $SCRIPT_DIR/backend/backend.log"

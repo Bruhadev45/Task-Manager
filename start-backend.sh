@@ -76,29 +76,44 @@ if ! python -c "import fastapi" 2>/dev/null; then
     echo -e "${GREEN}✅ Dependencies installed${NC}"
 fi
 
-# Check if port 8000 is already in use
+# Function to find an available port
+find_available_port() {
+    local start_port=$1
+    local port=$start_port
+    while lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; do
+        port=$((port + 1))
+        if [ $port -gt 65535 ]; then
+            echo -e "${RED}❌ Error: No available ports found${NC}"
+            exit 1
+        fi
+    done
+    echo $port
+}
+
+# Check if port 8000 is already in use and find alternative
+BACKEND_PORT=8000
 if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null 2>&1 ; then
     echo -e "${YELLOW}⚠️  Port 8000 is already in use${NC}"
-    echo -e "${YELLOW}💡 Another backend server might be running. Stop it first or use a different port.${NC}"
-    read -p "Continue anyway? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
+    BACKEND_PORT=$(find_available_port 8001)
+    echo -e "${GREEN}✅ Using alternative port: $BACKEND_PORT${NC}"
+    echo ""
 fi
+
+# Save backend port to file for other scripts
+echo "$BACKEND_PORT" > "$SCRIPT_DIR/.backend_port"
 
 # Start the server
 echo ""
 echo -e "${GREEN}✅ Starting FastAPI server...${NC}"
-echo -e "${BLUE}🌐 Backend API: http://localhost:8000${NC}"
-echo -e "${BLUE}📚 API Docs: http://localhost:8000/docs${NC}"
-echo -e "${BLUE}💚 Health Check: http://localhost:8000/${NC}"
+echo -e "${BLUE}🌐 Backend API: http://localhost:$BACKEND_PORT${NC}"
+echo -e "${BLUE}📚 API Docs: http://localhost:$BACKEND_PORT/docs${NC}"
+echo -e "${BLUE}💚 Health Check: http://localhost:$BACKEND_PORT/${NC}"
 echo ""
 echo -e "${YELLOW}💡 Press Ctrl+C to stop the server${NC}"
 echo ""
 
 # Start uvicorn with error handling
-uvicorn main:app --reload --host 0.0.0.0 --port 8000 || {
+uvicorn main:app --reload --host 0.0.0.0 --port $BACKEND_PORT || {
     echo ""
     echo -e "${RED}❌ Failed to start backend server${NC}"
     echo -e "${YELLOW}💡 Check the error messages above for details${NC}"
