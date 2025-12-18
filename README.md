@@ -19,8 +19,6 @@ A clean, production-quality Task Manager application with a modern three-column 
 - Real-time task filtering and search
 - Responsive design for all screen sizes
 
-**💡 AI Features**: See `docs/AI_FEATURES_SUGGESTIONS.md` for AI enhancement ideas like natural language task creation, smart prioritization, and intelligent search.
-
 ## 🛠 Tech Stack
 
 ### Frontend Technologies
