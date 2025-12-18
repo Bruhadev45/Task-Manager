@@ -378,29 +378,6 @@ The backend needs to be deployed separately (Railway, Render, or Heroku). See `V
 - **Database Seeding**: See `docs/SEED_INSTRUCTIONS.md` for seeding instructions
 - **Requirements**: See `REQUIREMENTS_CHECKLIST.md` for requirements verification
 
-## 🐛 Troubleshooting
-
-**Backend won't start:**
-- Check that `.env` file exists and has correct Supabase credentials
-- Ensure Python virtual environment is activated
-- Verify all dependencies are installed: `pip install -r requirements.txt`
-
-**Frontend can't connect to backend:**
-- Verify backend is running on port 8000
-- Check `.env.local` has correct `NEXT_PUBLIC_API_URL`
-- Check browser console for CORS errors
-
-**Database errors:**
-- Verify Supabase table was created correctly (run `database/schema.sql`)
-- Check Supabase credentials in backend `.env`
-- Ensure Supabase project is active (not paused)
-- If subtasks aren't working, run `database/migration_add_subtasks.sql`
-
-**CSS not loading:**
-- Clear Next.js cache: `cd frontend && rm -rf .next && npm run dev`
-- Hard refresh browser (Ctrl+Shift+R or Cmd+Shift+R)
-
-For more detailed troubleshooting, see `docs/TROUBLESHOOTING.md`.
 
 ## 📸 Screenshots
 
