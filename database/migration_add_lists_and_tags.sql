@@ -55,3 +55,9 @@ INSERT INTO tags (name) VALUES
   ('documentation')
 ON CONFLICT (name) DO NOTHING;
 
+-- Verify the migration was successful
+SELECT 'Migration complete! Lists: ' || COUNT(*)::text FROM custom_lists;
+SELECT 'Migration complete! Tags: ' || COUNT(*)::text FROM tags;
+SELECT * FROM custom_lists ORDER BY name;
+SELECT * FROM tags ORDER BY name;
+
