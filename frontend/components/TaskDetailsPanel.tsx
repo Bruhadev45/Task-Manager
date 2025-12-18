@@ -47,9 +47,6 @@ export default function TaskDetailsPanel({
   const [availableLists, setAvailableLists] = useState<string[]>(['personal', 'work', 'list1'])
   const [availableTags, setAvailableTags] = useState<string[]>([])
   const [showAddTagModal, setShowAddTagModal] = useState(false)
-  const [useNaturalLanguage, setUseNaturalLanguage] = useState(false)
-  const [naturalLanguageText, setNaturalLanguageText] = useState('')
-  const [parsing, setParsing] = useState(false)
   
   // Load available lists and tags
   useEffect(() => {
@@ -193,8 +190,6 @@ export default function TaskDetailsPanel({
         setPriority('medium')
         setDueDate('')
         setList(null)
-        setUseNaturalLanguage(false)
-        setNaturalLanguageText('')
         setIsCreating(false)
         if (onSetCreateMode) {
           onSetCreateMode(false)

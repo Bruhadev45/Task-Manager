@@ -32,21 +32,6 @@ class TaskList(str, Enum):
     LIST1 = "list1"
 
 
-class NaturalLanguageParseRequest(BaseModel):
-    """Model for natural language task parsing request."""
-    text: str = Field(..., min_length=1, max_length=500, description="Natural language task description")
-
-
-class NaturalLanguageParseResponse(BaseModel):
-    """Model for natural language task parsing response."""
-    title: str
-    description: Optional[str] = None
-    status: TaskStatus = TaskStatus.TODO
-    priority: TaskPriority = TaskPriority.MEDIUM
-    due_date: Optional[date] = None
-    list: Optional[str] = None
-
-
 class TaskBase(BaseModel):
     """
     Base task model with common fields shared by create and response models.
