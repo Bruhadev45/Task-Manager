@@ -63,11 +63,6 @@ rm -rf .next
 npm run dev
 ```
 
-Or use the fix script:
-```bash
-./fix-css.sh
-```
-
 ### Issue 5: Database Connection Errors
 
 **Check these**:

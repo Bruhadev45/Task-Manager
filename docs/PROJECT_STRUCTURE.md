@@ -72,8 +72,7 @@ Task Manager/
 ├── start.sh                   # Start both servers
 ├── start-backend.sh           # Start backend only
 ├── start-frontend.sh          # Start frontend only
-├── stop.sh                    # Stop all servers
-└── fix-css.sh                 # Fix CSS loading issues
+└── stop.sh                    # Stop all servers
 ```
 
 ## Code Organization Standards
