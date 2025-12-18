@@ -10,7 +10,7 @@
 
 ## 📋 Project Overview
 
-A clean, production-quality Task Manager application with a modern three-column layout. Built with Next.js, FastAPI, and Supabase, demonstrating full-stack development with proper separation of concerns, human-readable code, and comprehensive error handling.
+A clean, production-quality Task Manager application with a modern three-column layout. Built with Next.js, FastAPI, and Supabase, demonstrating full-stack development with proper separation of concerns.
 
 **Key Features:**
 - Three-column UI: Sidebar navigation, task list, and details panel
