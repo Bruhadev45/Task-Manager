@@ -404,15 +404,25 @@ For more detailed troubleshooting, see `docs/TROUBLESHOOTING.md`.
 
 ## 📸 Screenshots
 
-**Note**: Screenshots directory is ready. To add screenshots:
+### Main Dashboard - Three-Column Layout
 
-1. Start the application: `./start.sh`
-2. Open http://localhost:3000
-3. Take screenshots of:
-   - **Main Page**: Three-column layout with sidebar, task list, and details panel
-   - **Task Creation**: Right panel showing create form
-   - **Task Editing**: Right panel showing task details with subtasks
-4. Save as `screenshots/main-page.png`, `screenshots/create-task.png`, etc.
+![Main Dashboard](screenshots/main-dashboard.png)
+
+*The main dashboard showing the three-column layout:*
+- **Left Sidebar**: Navigation with Today, Upcoming, Lists (Personal, Work, List 1, Project Xyz), and Tags
+- **Middle Panel**: Task list for the selected list (Work) with 13 tasks, showing checkboxes, due dates, and priority tags
+- **Right Panel**: New task creation form with all fields including title, description, status, priority, list, due date, tags, and subtasks
+
+### Task Details View
+
+![Task Details](screenshots/task-details.png)
+
+*Task details panel showing:*
+- **Selected Task**: "Setup development environment" with full details
+- **Task Information**: Description, status (Todo), priority (High), list (Work), and due date (13/12/2025)
+- **Tags**: Existing tags (XYZ, bcd) with ability to add new tags
+- **Subtasks**: Subtask management with "work on it" subtask and ability to add more
+- **Actions**: Delete task and save changes buttons
 
 ---
 
