@@ -257,6 +257,46 @@ export default function TaskDetailsPanel({
     }
   }
 
+  const handleParseNaturalLanguage = async () => {
+    if (!naturalLanguageText.trim()) {
+      showToast('Please enter a task description', 'error')
+      return
+    }
+
+    try {
+      setParsing(true)
+      const parsed = await taskService.parseNaturalLanguage(naturalLanguageText.trim())
+      
+      // Populate form fields with parsed data
+      setTitle(parsed.title)
+      if (parsed.description) {
+        setDescription(parsed.description)
+      }
+      setStatus(parsed.status)
+      setPriority(parsed.priority)
+      if (parsed.due_date) {
+        // Convert YYYY-MM-DD to local date format for input
+        const date = new Date(parsed.due_date)
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        setDueDate(`${year}-${month}-${day}`)
+      }
+      if (parsed.list) {
+        setList(parsed.list)
+      }
+      
+      // Switch back to normal form view
+      setUseNaturalLanguage(false)
+      setNaturalLanguageText('')
+      showToast('Task parsed successfully! Review and save.', 'success')
+    } catch (err: any) {
+      showToast(err.message || 'Failed to parse task. Please try again.', 'error')
+    } finally {
+      setParsing(false)
+    }
+  }
+
   return (
     <div className="task-details-panel">
       <div className="panel-header">
