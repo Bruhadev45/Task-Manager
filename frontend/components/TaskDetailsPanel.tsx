@@ -423,7 +423,7 @@ export default function TaskDetailsPanel({
           {!isCreating && (
             <button
               className="btn-delete"
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
             >
               Delete Task
             </button>
