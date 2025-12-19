@@ -45,7 +45,7 @@ export interface TaskUpdate {
   description?: string
   status?: TaskStatus
   priority?: TaskPriority
-  due_date?: string
+  due_date?: string | null
   list?: TaskList
   subtasks?: Subtask[]
   tags?: string[]

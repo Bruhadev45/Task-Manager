@@ -198,26 +198,70 @@ export default function TaskDetailsPanel({
       const currentTags = task.tags || []
       const tagsChanged = JSON.stringify(selectedTags.sort()) !== JSON.stringify([...currentTags].sort())
       
+      // Normalize date comparison - convert both to YYYY-MM-DD format
+      let dueDateChanged = false
+      let dueDateValue: string | null | undefined = undefined
+      
+      // Normalize task.due_date to YYYY-MM-DD format
+      const normalizeDate = (dateStr: string | undefined | null): string => {
+        if (!dateStr) return ''
+        // If already in YYYY-MM-DD format, return as is
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+          return dateStr
+        }
+        // Otherwise parse and convert
+        try {
+          const date = new Date(dateStr)
+          if (!isNaN(date.getTime())) {
+            return date.toISOString().split('T')[0]
+          }
+        } catch (e) {
+          // Ignore parsing errors
+        }
+        return ''
+      }
+      
+      const normalizedDueDate = dueDate || ''
+      const normalizedTaskDueDate = normalizeDate(task.due_date)
+      
+      if (normalizedDueDate !== normalizedTaskDueDate) {
+        dueDateChanged = true
+        dueDateValue = dueDate || null // null to clear, string to set
+      }
+      
       const updateData: TaskUpdate = {
-        title: title !== task.title ? title : undefined,
-        description: description !== (task.description || '') ? description : undefined,
+        title: title.trim() !== task.title ? title.trim() : undefined,
+        description: description.trim() !== (task.description || '') ? description.trim() : undefined,
         status: status !== task.status ? status : undefined,
         priority: priority !== task.priority ? priority : undefined,
-        due_date: dueDate !== task.due_date ? dueDate : undefined,
+        due_date: dueDateValue,
         list: list !== (task.list || null) ? list : undefined,
         subtasks: subtasksChanged ? (validSubtasks.length > 0 ? validSubtasks : []) : undefined,
         tags: tagsChanged ? (selectedTags.length > 0 ? selectedTags : []) : undefined,
       }
 
-      const hasChanges = Object.keys(updateData).some(key => updateData[key as keyof TaskUpdate] !== undefined)
+      // Remove undefined values and check if there are actual changes
+      const cleanUpdateData: TaskUpdate = {}
+      Object.keys(updateData).forEach(key => {
+        const value = updateData[key as keyof TaskUpdate]
+        if (value !== undefined) {
+          ;(cleanUpdateData as any)[key] = value
+        }
+      })
+      
+      const hasChanges = Object.keys(cleanUpdateData).length > 0
       
       if (hasChanges) {
-        await taskService.updateTask(task.id, updateData)
+        await taskService.updateTask(task.id, cleanUpdateData)
         showToast('Task updated successfully', 'success')
         onUpdate()
+      } else {
+        showToast('No changes to save', 'info')
       }
-    } catch (err) {
-      showToast('Failed to save task', 'error')
+    } catch (err: any) {
+      const errorMessage = err?.message || 'Failed to save task'
+      console.error('Save task error:', err)
+      showToast(errorMessage, 'error')
     } finally {
       setSaving(false)
     }
