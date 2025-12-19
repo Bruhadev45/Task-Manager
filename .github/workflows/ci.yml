@@ -19,12 +19,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache: false   # disable cache to avoid npm ci issues
+
+      - name: Verify frontend files
+        run: |
+          ls frontend
+          cat frontend/package.json
+          cat frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Run linter
         working-directory: frontend
@@ -33,3 +38,26 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+
+  backend:
+    name: Backend Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check syntax
+        working-directory: backend
+        run: python -m py_compile main.py app/*.py app/routers/*.py
