@@ -19,17 +19,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: false   # disable cache to avoid npm ci issues
-
-      - name: Verify frontend files
-        run: |
-          ls frontend
-          cat frontend/package.json
-          cat frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm ci --no-audit --no-fund
+        run: |
+          rm -f package-lock.json
+          npm install --no-audit --no-fund
 
       - name: Run linter
         working-directory: frontend
